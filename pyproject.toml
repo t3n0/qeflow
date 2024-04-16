@@ -1,0 +1,42 @@
+[build-system]
+requires      = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "qeflow"
+description = "Workflow tool for quantum espresso without scassamento di maroni"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+keywords = ["qe", "quantum", "espresso", "workflow", ""]
+authors = [
+    {name = "Stefano Dal Forno", email = "tenobaldi@gmail.com"},]
+maintainers = [
+    {name = "Stefano Dal Forno", email = "tenobaldi@gmail.com"}]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python"]
+
+dependencies = []
+
+# dynamic version
+dynamic = ["version"]
+[tool.setuptools.dynamic]
+version = {attr = "qeflow.__version__"}
+
+
+[tool.setuptools]
+packages = ["qeflow"]
+
+
+[project.urls]
+#Homepage = "https://example.com"
+#Documentation = "https://readthedocs.org"
+#Repository = "https://github.com/me/qeflow.git"
+#Changelog = "https://github.com/me/qeflow/blob/master/CHANGELOG.md"
+
+
+[project.scripts]
+qeflow = "qeflow.main:main"
+
