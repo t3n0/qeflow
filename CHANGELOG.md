@@ -9,5 +9,5 @@ All notable changes of [`qeflow`] will be documented in this file (based on [Kee
 - pollo
 - pollo
 
-[`qeflow`]: https://
+[`qeflow`]: https://github.com/t3n0/qeflow
 [Unreleased]: https://
