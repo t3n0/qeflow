@@ -2,12 +2,11 @@
 
 All notable changes of [`qeflow`] will be documented in this file (based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)).
 
-## [Unreleased]
+## QE-flow [unreleased]
 
 ### Added
 
-- pollo
-- pollo
+- Basic setup files (README.md, LICENSE, CHANGELOG.md, pyproject.toml, etc)
 
 [`qeflow`]: https://github.com/t3n0/qeflow
-[Unreleased]: https://
+[unreleased]: https://github.com/t3n0/qeflow/tree/develop
