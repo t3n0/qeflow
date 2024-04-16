@@ -2,4 +2,4 @@
 Root python file to test qeflow
 '''
 
-print('Hello from qeflow')
+print('Hello from qeflow test script')
