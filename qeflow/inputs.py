@@ -1,4 +1,4 @@
-from qeflow.constants import CWD
+from qeflow.constants import CWD, HOME
 from qeflow.logger import Logger
 from yaml import safe_load
 import os
@@ -21,6 +21,27 @@ class Inputs(object):
     def getTasks(self):
         return self.taskDicts
     
+class Config(object):
+    def __init__(self, logger = Logger()) -> None:
+        self.logger = logger
+    
+    def load(self):
+        cfgFilePath = os.path.join(HOME, '.qeflow.cfg')
+        if os.path.exists(cfgFilePath):
+            self.logger.info(f'Reading configuration file from {cfgFilePath}', 1)
+            configs = _configs | readYaml(cfgFilePath, self.logger)
+        else:
+            self.logger.info(f'Configuration file {cfgFilePath} is absent.', 1)
+            self.logger.info(f' * default configuration will be used', 1)
+            configs = _configs
+        self.logger.info(f'Configuration:', 2)
+        for k,v in configs.items():
+            self.logger.info(f' * {k} : {v}', 2)
+        self.configs = configs
+
+    def get(self, key):
+        return self.configs[key]
+        
 
 def readYaml(path, logger = Logger()):
     '''
@@ -231,3 +252,16 @@ _defaultKeys = {
     'cluster' : 'local',
     'nprocs' : 1,
     'withrespectto' : [],}
+
+_configs = {
+    'cluster' : 'local',
+    'pwx' : 'pw.x',
+    'phx' : 'ph.x',
+    'ppx' : 'pp.x',
+    'dosx' : 'dos.x',
+    'bandsx' : 'bands.x',
+    'projwfcx' : 'projwfc.x',
+    'plotbandx' : 'plotband.x',
+    'mpirun_qe' : 'mpirun',
+    'mpirun_w90' : 'mpirun',
+}
