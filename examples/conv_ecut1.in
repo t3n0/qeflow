@@ -9,9 +9,14 @@
 
 workflow:
     - scf:
+        kpoints: [4, 4, 1]
+    - nscf:
+        kpoints: [8, 8, 1]
 
 withrespectto:
     - ecutwfc: [40, 60, 80]
+    - ecutrho: [200, 400]
+    - occupations : [pollo, ciccio]
 
 name: scf_conv
 cluster: local 

@@ -50,9 +50,7 @@ def checkInput(inp, logger = Logger()):
             logger.info(f' * {key} deleted.', 2)
             del inp[key]
 
-    # workflow checks
     logger.info(f'Checking for wrong workflow flags.', 1)
-
     # check whether workflow is a list
     if type(inp['workflow']) != list:
         logger.info(f' * Error: the workflow flag must be a `list` of tasks.')
@@ -70,7 +68,7 @@ def checkInput(inp, logger = Logger()):
     # checking for wrong workflow flags
     tasks = []
     for work in inp['workflow']:
-        tasks.append(list(work.keys())[0]) # append the *only* key of every work
+        tasks.append(list(work.keys())[0]) # append the *only* key of each work
     # tasks is now something like [relax, scf, bands]
     wrongKeys = [key for key in tasks if key not in _correctWorkflow]
     if len(wrongKeys)>0:
@@ -83,8 +81,10 @@ def checkInput(inp, logger = Logger()):
     inp['tasks'] = tasks
 
     # checking withrespectto flag
-    if 'withrespectto' in list(inp.keys()):
-        pass
+    if 'withrespectto' in inp.keys():
+        if type(inp['withrespectto']) != list:
+            logger.info(f' * Error: `withrespectto` must be a list of dictionaries.')
+            raise Exception('WrongKeyError')
 
     # set default keys
     inp = _defaultKeys | inp
@@ -95,14 +95,100 @@ def checkInput(inp, logger = Logger()):
 
 
 def createTasks(inp, logger = Logger()):
-    taskDicts = []
+    '''
+    Returns a list of dictionaries. Each dictionary is the input of a specific code in the workflow.
+    Also, each dictionary is the cartesian product of the `withrespectto` flag entries.
+    '''
+
+    keys = []
+    table = []
+    for wrt in inp['withrespectto']:
+        for k, v in wrt.items():
+            keys.append(k)
+            table.append(v)
+    flat_table = flatTable(table)
+
+    wrtDicts = []
+    for values in flat_table:
+        aux = {}
+        for k,v in zip(keys, values):
+            aux[k] = v
+        wrtDicts.append(aux)
+
     # merging dictionary default | explicit, explicit keys overwrite the default ones
-    logger.info(f'Defining the workflow.', 1)
-    for i, (work, task) in enumerate(zip(inp['workflow'], inp['tasks'])):
-        logger.info(f' * task {i:2d}: {task}', 2)
+    flowDicts = []
+    for work, task in zip(inp['workflow'], inp['tasks']):
         aux = inp | work[task]
-        taskDicts.append(aux)
+        del aux['workflow']
+        del aux['tasks']
+        del aux['withrespectto']
+        aux['task'] = task
+        flowDicts.append(aux)
+    
+    # merge all dicts together
+    logger.info(f'Workflow that will be performed: {inp['tasks']}', 1)
+    taskDicts = []
+    if len(wrtDicts) == 0:
+        taskDicts = flowDicts
+    else:
+        logger.info(f'Each workflow will iterate {len(wrtDicts)} times.', 1)
+        logger.info(f'Iterating parameters:', 2)
+        for wrt in wrtDicts:
+            logger.info(f' * { wrt }', 2)
+            for flow in flowDicts:
+                aux = flow | wrt
+                taskDicts.append(aux)
     return taskDicts
+
+
+def joinList(arr1, arr2):
+    '''
+    Joins two lists and makes the carteisn product list.
+    Example:
+    arr1 = [1,2]
+    arr2 = [4,5,6]
+    arr = [[1, 4], [2, 4], [1, 5], [2, 5], [1, 6], [2, 6]]
+    '''
+    arr = []
+    if len(arr1) == 0:
+        arr = arr2
+    elif len(arr1) > 0:
+        for a2 in arr2:
+            if type(a2) != list: a2 = [a2]
+            for a1 in arr1:
+                if type(a1) != list: a1 = [a1]
+                arr.append(a1 + a2)
+    return arr
+
+
+def flatTable(table):
+    '''
+    Returns the flatten cartesian product of all lists in table.
+    Example:
+    arr1 = [1,2]
+    arr2 = [4,5,6]
+    arr3 = ['ciao', 'ciccio']
+    table = [arr1, arr2, arr3]
+    aux =  [[1, 4, 'ciao'],
+            [2, 4, 'ciao'], 
+            [1, 5, 'ciao'], 
+            [2, 5, 'ciao'], 
+            [1, 6, 'ciao'], 
+            [2, 6, 'ciao'], 
+            [1, 4, 'ciccio'], 
+            [2, 4, 'ciccio'], 
+            [1, 5, 'ciccio'], 
+            [2, 5, 'ciccio'], 
+            [1, 6, 'ciccio'], 
+            [2, 6, 'ciccio']]
+    '''
+    if len(table) == 1:
+        return [ [a] for a in table[0]]
+    else:
+        aux = []
+        for tab in table:
+            aux = joinList(aux, tab)
+        return aux
 
 
 _correctKeys = [
@@ -138,4 +224,5 @@ _correctWorkflow = [
 _defaultKeys = {
     'name' : os.path.join(CWD, 'pollo'),
     'cluster' : 'local',
-    'nprocs' : 1,}
+    'nprocs' : 1,
+    'withrespectto' : [],}
