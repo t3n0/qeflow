@@ -5,8 +5,9 @@ Definitions of some global constants.
 
 import os
 
-# current working directory
+# directories
 CWD = os.getcwd()
+HOME = os.environ["HOME"]
 
 # physical constants
 B2A = 0.52917720859   # 1 bohr = 0.53 ang

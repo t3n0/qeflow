@@ -4,7 +4,7 @@ from yaml import safe_load
 import os
 
 
-class InputFile(object):
+class Inputs(object):
     def __init__(self, logger = Logger()) -> None:
         self.logger = logger
 
@@ -15,8 +15,11 @@ class InputFile(object):
         self.taskDicts = createTasks(inp, self.logger)
         self.inp = inp        
     
-    def get(self, key):
+    def getInput(self, key):
         return self.inp[key]
+    
+    def getTasks(self):
+        return self.taskDicts
     
 
 def readYaml(path, logger = Logger()):
@@ -214,11 +217,13 @@ _correctKeys = [
 
 
 _correctWorkflow = [
-    'relax',
     'scf',
     'nscf',
     'bands',
-    'dos',]
+    'relax',
+    'vc-relax',
+    'dos',
+    'w90',]
 
 
 _defaultKeys = {
