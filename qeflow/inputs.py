@@ -1,6 +1,6 @@
-from qeflow.constants import CWD, HOME
+from qeflow.constants import CWD
 from qeflow.logger import Logger
-from yaml import safe_load
+from qeflow.utils import readYaml, flatTable
 import os
 
 
@@ -10,7 +10,8 @@ class Inputs(object):
 
     def load(self, path):
         self.path = path
-        inp = readYaml(self.path, self.logger)
+        self.logger.info(f'Reading {path} input file.', 1)
+        inp = readYaml(self.path)
         inp = checkInput(inp, self.logger)
         self.taskDicts = createTasks(inp, self.logger)
         self.inp = inp        
@@ -20,37 +21,6 @@ class Inputs(object):
     
     def getTasks(self):
         return self.taskDicts
-    
-class Config(object):
-    def __init__(self, logger = Logger()) -> None:
-        self.logger = logger
-    
-    def load(self):
-        cfgFilePath = os.path.join(HOME, '.qeflow.cfg')
-        if os.path.exists(cfgFilePath):
-            self.logger.info(f'Reading configuration file from {cfgFilePath}', 1)
-            configs = _configs | readYaml(cfgFilePath, self.logger)
-        else:
-            self.logger.info(f'Configuration file {cfgFilePath} is absent.', 1)
-            self.logger.info(f' * default configuration will be used', 1)
-            configs = _configs
-        self.logger.info(f'Configuration:', 2)
-        for k,v in configs.items():
-            self.logger.info(f' * {k} : {v}', 2)
-        self.configs = configs
-
-    def get(self, key):
-        return self.configs[key]
-        
-
-def readYaml(path, logger = Logger()):
-    '''
-    Reads and returns the YAML dictionary.
-    '''
-    logger.info(f'Reading {path} yaml input file.', 1)
-    with open(path,'r') as f: 
-        data = safe_load(f)
-    return data
 
 
 def checkInput(inp, logger = Logger()):
@@ -165,76 +135,36 @@ def createTasks(inp, logger = Logger()):
     return taskDicts
 
 
-def joinList(arr1, arr2):
-    '''
-    Joins two lists and makes the carteisn product list.
-    Example:
-    arr1 = [1,2]
-    arr2 = [4,5,6]
-    arr = [[1, 4], [2, 4], [1, 5], [2, 5], [1, 6], [2, 6]]
-    '''
-    arr = []
-    if len(arr1) == 0:
-        arr = arr2
-    elif len(arr1) > 0:
-        for a2 in arr2:
-            if type(a2) != list: a2 = [a2]
-            for a1 in arr1:
-                if type(a1) != list: a1 = [a1]
-                arr.append(a1 + a2)
-    return arr
-
-
-def flatTable(table):
-    '''
-    Returns the flatten cartesian product of all lists in table.
-    Example:
-    arr1 = [1,2]
-    arr2 = [4,5,6]
-    arr3 = ['ciao', 'ciccio']
-    table = [arr1, arr2, arr3]
-    aux =  [[1, 4, 'ciao'],
-            [2, 4, 'ciao'], 
-            [1, 5, 'ciao'], 
-            [2, 5, 'ciao'], 
-            [1, 6, 'ciao'], 
-            [2, 6, 'ciao'], 
-            [1, 4, 'ciccio'], 
-            [2, 4, 'ciccio'], 
-            [1, 5, 'ciccio'], 
-            [2, 5, 'ciccio'], 
-            [1, 6, 'ciccio'], 
-            [2, 6, 'ciccio']]
-    '''
-    if len(table) == 1:
-        return [ [a] for a in table[0]]
-    else:
-        aux = []
-        for tab in table:
-            aux = joinList(aux, tab)
-        return aux
-
-
 _correctKeys = [
 'workflow',
 'withrespectto',
 'name',
-'cluster',
 'nprocs',
+'time',
+'partition',
+'qos',
+
 'pseudo_pots',
 'atoms',
 'masses',
 'positions',
 'unit_cell',
-'kpoints',
-'nbnd',
+
+'restart',
 'prefix',
 'pseudo_dir',
+'verbosity',
+
+'kpoints',
+'lspinorb',
+'noncolin',
+'nosym',
+'nbnd',
 'ecutwfc',
 'assume_isolated',
 'conv_thr',
 'mixing_beta',
-'restart',]
+'cell_dofree',]
 
 
 _correctWorkflow = [
@@ -248,20 +178,10 @@ _correctWorkflow = [
 
 
 _defaultKeys = {
-    'name' : os.path.join(CWD, 'pollo'),
-    'cluster' : 'local',
+    'name' : os.path.join(CWD, 'myflow'),
     'nprocs' : 1,
+    'time' : '0:20:0',
+    'partition' : 'standard',
+    'qos' : 'short',
     'withrespectto' : [],}
 
-_configs = {
-    'cluster' : 'local',
-    'pwx' : 'pw.x',
-    'phx' : 'ph.x',
-    'ppx' : 'pp.x',
-    'dosx' : 'dos.x',
-    'bandsx' : 'bands.x',
-    'projwfcx' : 'projwfc.x',
-    'plotbandx' : 'plotband.x',
-    'mpirun_qe' : 'mpirun',
-    'mpirun_w90' : 'mpirun',
-}
