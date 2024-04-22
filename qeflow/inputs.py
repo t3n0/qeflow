@@ -120,15 +120,17 @@ def createTasks(inp, logger = Logger()):
         flowDicts.append(aux)
     
     # merge all dicts together
-    logger.info(f'Workflow that will be performed: {inp['tasks']}', 1)
+    logger.info(f'Workflow that will be performed:', 1)
+    for task in inp['tasks']:
+        logger.info(f' * {task}', 1)
     taskDicts = []
     if len(wrtDicts) == 0:
         taskDicts = flowDicts
     else:
         logger.info(f'Each workflow will iterate {len(wrtDicts)} times.', 1)
-        logger.info(f'Iterating parameters:', 2)
+        logger.info(f'Iterating parameters:', 1)
         for wrt in wrtDicts:
-            logger.info(f' * { wrt }', 2)
+            logger.info(f' * { wrt }', 1)
             for flow in flowDicts:
                 aux = flow | wrt
                 taskDicts.append(aux)

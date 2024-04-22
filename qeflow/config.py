@@ -37,9 +37,9 @@ class Config(object):
             self.configs = _defaultConfigs
         
         # print configs to logger
-        self.logger.info(f'The system configuration is:', 1)
+        self.logger.info(f'The system configuration is:', 2)
         for k,v in self.configs.items():
-            self.logger.info(f' * {k} : {v}', 1)
+            self.logger.info(f' * {k} : {v}', 2)
         
 
     def get(self, key):
