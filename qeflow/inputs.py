@@ -116,6 +116,10 @@ def createTasks(inp, logger = Logger()):
         del aux['workflow']
         del aux['tasks']
         del aux['withrespectto']
+        del aux['nprocs']
+        del aux['time']
+        del aux['partition']
+        del aux['qos']
         aux['task'] = task
         flowDicts.append(aux)
     
@@ -134,6 +138,11 @@ def createTasks(inp, logger = Logger()):
             for flow in flowDicts:
                 aux = flow | wrt
                 taskDicts.append(aux)
+    
+    for i, task in enumerate(taskDicts):
+        task['fileNameIn'] = f'{i:02d}.in'
+        task['fileNameOut'] = f'{i:02d}.out'
+    
     return taskDicts
 
 
