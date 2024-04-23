@@ -57,13 +57,17 @@ class Slurm(object):
         for i, task in enumerate(tasks):
             text += f'srun --distribution=block:block --hint=nomultithread qeflow {inputPath} -i {i}\n'
             if task['task'] in pwTasks:
-                text += f'srun --distribution=block:block --hint=nomultithread pw.x -in {task['fileNameIn']} >> {task['fileNameOut']}\n'
+                text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['pwx']} -in {task['fileNameIn']} >> {task['fileNameOut']}\n'
             if task['task'] in dosTasks:
-                text += f'srun --distribution=block:block --hint=nomultithread dos.x -in {task['fileNameIn']} >> {task['fileNameOut']}\n'
+                text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['dosx']} -in {task['fileNameIn']} >> {task['fileNameOut']}\n'
             if task['task'] in phTasks:
-                text += f'srun --distribution=block:block --hint=nomultithread ph.x -in{task['fileNameIn']} >> {task['fileNameOut']}\n'
+                text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['phx']} -in {task['fileNameIn']} >> {task['fileNameOut']}\n'
             if task['task'] in w90Tasks:
-                text += f'srun --distribution=block:block --hint=nomultithread wannier90.x {task['fileNameIn']} >> {task['fileNameOut']}\n'
+                text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['w90x']} {task['fileNameIn']} >> {task['fileNameOut']}\n'
+            if task['task'] in w90ppTasks:
+                text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['w90x']} -pp {task['fileNameIn']} >> {task['fileNameOut']}\n'
+            if task['task'] in pw2w90Tasks:
+                text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['pw2w90x']} {task['fileNameIn']} >> {task['fileNameOut']}\n'
         # print(text)
 
         slurmInp['srunBlock'] = text
@@ -74,7 +78,6 @@ class Slurm(object):
         pass
 
 
-# tasks that require to run pw.x
 pwTasks = [
     'scf',
     'nscf',
@@ -85,19 +88,24 @@ pwTasks = [
     'vc-md',
 ]
 
-# tasks that require to run dos.x
 dosTasks = [
     'dos',
 ]
 
-# tasks that require to run ph.x
 phTasks = [
     'ph',
 ]
 
-# tasks that require to run wannier90.x
 w90Tasks = [
     'w90',
+]
+
+w90ppTasks = [
+    'w90pp',
+]
+
+pw2w90Tasks = [
+    'pw2w90',
 ]
 
 slurmSkel = '''

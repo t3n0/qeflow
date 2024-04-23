@@ -185,7 +185,9 @@ _correctWorkflow = [
     'relax',
     'vc-relax',
     'dos',
-    'w90',]
+    'w90',
+    'w90pp',
+    'pw2w90',]
 
 
 _defaultKeys = {
