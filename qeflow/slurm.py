@@ -55,7 +55,7 @@ class Slurm(object):
         text = ''
         inputPath = self.inp.path
         for i, task in enumerate(tasks):
-            text += f'srun --distribution=block:block --hint=nomultithread qeflow {inputPath} -i {i}\n'
+            text += f'srun --nodes=1 --ntasks=1 --ntasks-per-node=1 --exact --mem=1500M qeflow {inputPath} -i {i}\n'
             if task['task'] in pwTasks:
                 text += f'srun --distribution=block:block --hint=nomultithread {cfgDict['pwx']} -in {task['fileNameIn']} >> {task['fileNameOut']}\n'
             if task['task'] in dosTasks:
@@ -116,6 +116,9 @@ slurmSkel = '''
 #SBATCH --ntasks-per-node={task_per_node}
 #SBATCH --cpus-per-task={cpu_per_task}
 #SBATCH --time={time}
+#SBATCH --distribution=block:block
+#SBATCH --hint=nomultithread
+
 #SBATCH --account={account}
 #SBATCH --partition={partition}
 #SBATCH --qos={qos}

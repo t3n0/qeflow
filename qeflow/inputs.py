@@ -1,8 +1,8 @@
 from qeflow.constants import CWD
 from qeflow.logger import Logger
-from qeflow.utils import readYaml, flatTable
+from qeflow.utils import readYaml
 import os
-
+import itertools
 
 class Inputs(object):
     def __init__(self, logger = Logger()) -> None:
@@ -100,7 +100,7 @@ def createTasks(inp, logger = Logger()):
         for k, v in wrt.items():
             keys.append(k)
             table.append(v)
-    flat_table = flatTable(table)
+    flat_table = itertools.product(*table)
 
     wrtDicts = []
     for values in flat_table:
@@ -113,13 +113,13 @@ def createTasks(inp, logger = Logger()):
     flowDicts = []
     for work, task in zip(inp['workflow'], inp['tasks']):
         aux = inp | work[task]
-        del aux['workflow']
-        del aux['tasks']
-        del aux['withrespectto']
-        del aux['nprocs']
-        del aux['time']
-        del aux['partition']
-        del aux['qos']
+        # del aux['workflow']
+        # del aux['tasks']
+        # del aux['withrespectto']
+        # del aux['nprocs']
+        # del aux['time']
+        # del aux['partition']
+        # del aux['qos']
         aux['task'] = task
         flowDicts.append(aux)
     
@@ -128,16 +128,13 @@ def createTasks(inp, logger = Logger()):
     for task in inp['tasks']:
         logger.info(f' * {task}', 1)
     taskDicts = []
-    if len(wrtDicts) == 0:
-        taskDicts = flowDicts
-    else:
-        logger.info(f'Each workflow will iterate {len(wrtDicts)} times.', 1)
-        logger.info(f'Iterating parameters:', 1)
-        for wrt in wrtDicts:
-            logger.info(f' * { wrt }', 1)
-            for flow in flowDicts:
-                aux = flow | wrt
-                taskDicts.append(aux)
+    logger.info(f'Each workflow will iterate {len(wrtDicts)} times.', 1)
+    logger.info(f'Iterating parameters:', 1)
+    for wrt in wrtDicts:
+        logger.info(f' * { wrt }', 1)
+        for flow in flowDicts:
+            aux = flow | wrt
+            taskDicts.append(aux)
     
     for i, task in enumerate(taskDicts):
         task['fileNameIn'] = f'{i:02d}.in'
