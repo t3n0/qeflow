@@ -4,23 +4,18 @@ from qeflow.utils import readYaml
 import os
 import itertools
 
-class Inputs(object):
-    def __init__(self, logger = Logger()) -> None:
-        self.logger = logger
 
-    def load(self, path):
+class Inputs(object):
+    def __init__(self, path, logger = Logger()) -> None:
+        self.logger = logger
         self.path = path
-        self.logger.info(f'Reading {path} input file.', 1)
+        self.logger.info(f'Reading input file from:\n   {path}', 1)
         inp = readYaml(self.path)
         inp = checkInput(inp, self.logger)
-        self.taskDicts = createTasks(inp, self.logger)
         self.inp = inp        
     
     def getInput(self, key):
         return self.inp[key]
-    
-    def getTasks(self):
-        return self.taskDicts
 
 
 def checkInput(inp, logger = Logger()):

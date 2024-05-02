@@ -4,6 +4,7 @@ Simple logging and printing function
 
 
 from functools import partial
+import os
 from io import StringIO
 
 
@@ -25,3 +26,11 @@ class Logger(object):
         contents = self.log.getvalue()
         self.log.close()
         return contents
+    
+    def saveLog(self, path):
+        if os.path.exists(path):
+            with open(path, 'a') as logfile:
+                logfile.write(self.getLog())
+        else:
+            with open(path, 'w') as logfile:
+                logfile.write(self.getLog())

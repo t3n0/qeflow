@@ -7,11 +7,16 @@ import os
 class Config(object):
     def __init__(self, logger = Logger()) -> None:
         self.logger = logger
-    
-    def load(self):
-        cfgFilePath = os.path.join(HOME, 'qeflow.cfg')
-        if os.path.exists(cfgFilePath):
-            self.logger.info(f'Reading configuration file from {cfgFilePath}', 1)
+        
+        if os.path.exists(os.path.join(CWD, 'qeflow.cfg')):
+            cfgFilePath = os.path.join(CWD, 'qeflow.cfg')
+        elif os.path.exists(os.path.join(HOME, '.qeflow.cfg')):
+            cfgFilePath = os.path.join(HOME, '.qeflow.cfg')
+        else:
+            cfgFilePath = None
+        
+        if cfgFilePath:
+            self.logger.info(f'Reading configuration file from:\n   {cfgFilePath}', 1)
             configs = readYaml(cfgFilePath)
 
             # check for wrong config keys
@@ -32,7 +37,7 @@ class Config(object):
             self.logger.info(f'Set missing configs with default ones.', 1)
             self.configs = _defaultConfigs | configs
         else:
-            self.logger.info(f'Configuration file {cfgFilePath} is absent.', 1)
+            self.logger.info(f'Configuration file is absent.', 1)
             self.logger.info(f' * default configuration will be used', 1)
             self.configs = _defaultConfigs
         
