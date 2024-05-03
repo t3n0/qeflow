@@ -29,6 +29,10 @@ def createDir(dir, logger = Logger()):
     else:
         logger.info(f" * directory already exists.", 2)
 
+def removeFile(name):
+    if os.path.exists(name):
+        os.remove(name)
+
 
 def runProcess(command, inputFile):
     with open(inputFile, 'r') as inp:
