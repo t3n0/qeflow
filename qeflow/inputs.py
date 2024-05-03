@@ -4,18 +4,12 @@ from qeflow.utils import readYaml
 import os
 
 
-class Inputs(object):
-    def __init__(self, path, logger = Logger()) -> None:
-        self.logger = logger
-        self.path = path
-        self.logger.info(f'\n--------------------------------', 1)
-        self.logger.info(f'Reading input file from:\n   {path}', 1)
-        inp = readYaml(self.path)
-        inp = checkInput(inp, self.logger)
-        self.inp = inp        
-    
-    def getInput(self, key):
-        return self.inp[key]
+def readInput(path, logger = Logger()):
+    logger.info(f'\n--------------------------------', 1)
+    logger.info(f'Reading input file from:\n   {path}', 1)
+    inp = readYaml(path)
+    inp = checkInput(inp, logger)
+    return inp
 
 
 def checkInput(inp, logger = Logger()):

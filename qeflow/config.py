@@ -4,52 +4,69 @@ from qeflow.utils import readYaml
 import os
 
 
-class Config(object):
-    def __init__(self, logger = Logger()) -> None:
-        self.logger = logger
-        
-        if os.path.exists(os.path.join(CWD, 'qeflow.cfg')):
-            cfgFilePath = os.path.join(CWD, 'qeflow.cfg')
-        elif os.path.exists(os.path.join(HOME, '.qeflow.cfg')):
-            cfgFilePath = os.path.join(HOME, '.qeflow.cfg')
-        else:
-            cfgFilePath = None
-        
-        if cfgFilePath:
-            self.logger.info(f'\n--------------------------------', 1)
-            self.logger.info(f'Reading configuration file from:\n   {cfgFilePath}', 1)
-            configs = readYaml(cfgFilePath)
+def readConfig(logger = Logger()):
+    '''
+    Read the configuration file and returns a dictionary.
+    First it checks the local folder, then HOME, then default configs are loaded.
+    '''
+    if os.path.exists(os.path.join(CWD, 'qeflow.cfg')):
+        cfgFilePath = os.path.join(CWD, 'qeflow.cfg')
+    elif os.path.exists(os.path.join(HOME, '.qeflow.cfg')):
+        cfgFilePath = os.path.join(HOME, '.qeflow.cfg')
+    else:
+        cfgFilePath = None
 
-            # check for wrong config keys
-            wrongKeys = [key for key in configs.keys() if key not in _correctKeys]
-            if len(wrongKeys)>0:
-                for wrongKey in wrongKeys:
-                    self.logger.info(f' * Error: `{wrongKey}` flag not recognised.')
-                raise Exception('WrongKeyError')
-            
-            # removing empty flags
-            self.logger.info(f'Removing empty flags from config.', 1)
-            keys = list(configs.keys()) # we need this so python does not complain about size change
-            for key in keys:
-                if configs[key] == None:
-                    self.logger.info(f' * {key} deleted.', 2)
-                    del configs[key]
-            
-            self.logger.info(f'Set missing configs with default ones.', 1)
-            self.configs = _defaultConfigs | configs
-        else:
-            self.logger.info(f'Configuration file is absent.', 1)
-            self.logger.info(f' * default configuration will be used', 1)
-            self.configs = _defaultConfigs
-        
-        # print configs to logger
-        self.logger.info(f'The system configuration is:', 2)
-        for k,v in self.configs.items():
-            self.logger.info(f' * {k} : {v}', 2)
-        
+    if cfgFilePath:
+        logger.info(f'\n--------------------------------', 1)
+        logger.info(f'Reading configuration file from:\n   {cfgFilePath}', 1)
+        configs = readYaml(cfgFilePath)
 
-    def get(self, key):
-        return self.configs[key]
+        # check for wrong config keys
+        wrongKeys = [key for key in configs.keys() if key not in _correctKeys]
+        if len(wrongKeys)>0:
+            for wrongKey in wrongKeys:
+                logger.info(f' * Error: `{wrongKey}` flag not recognised.')
+            raise Exception('WrongKeyError')
+        
+        # removing empty flags
+        logger.info(f'Removing empty flags from config.', 1)
+        keys = list(configs.keys()) # we need this so python does not complain about size change
+        for key in keys:
+            if configs[key] == None:
+                logger.info(f' * {key} deleted.', 2)
+                del configs[key]
+        
+        logger.info(f'Set missing configs with default ones.', 1)
+        configs = _defaultConfigs | configs
+    else:
+        logger.info(f'Configuration file is absent.', 1)
+        logger.info(f' * default configuration will be used', 1)
+        configs = _defaultConfigs
+    
+    # definition of all the executables for any given task
+    execDict = {
+        'scf' : f'{configs['pwx']}',
+        'nscf' : f'{configs['pwx']}',
+        'bands' : f'{configs['bandsx']}',
+        'relax' : f'{configs['pwx']}',
+        'vc-relax' : f'{configs['pwx']}',
+        'md' : f'{configs['pwx']}',
+        'vc-md' : f'{configs['pwx']}',
+        'dos' : f'{configs['dosx']}',
+        'ph' : f'{configs['phx']}',
+        'w90' : f'{configs['w90x']}',
+        'w90pp' : f'{configs['w90x']} -pp',
+        'pw2w90' : f'{configs['pw2w90x']}',
+    }
+
+    # join averything into the configs dictionary
+    configs = configs | execDict
+
+    # print configs to logger
+    logger.info(f'The system configuration is:', 2)
+    for k,v in configs.items():
+        logger.info(f' * {k} : {v}', 2)
+    return configs
     
 
 _correctKeys = {

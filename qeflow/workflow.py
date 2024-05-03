@@ -1,17 +1,9 @@
 import itertools
-import yaml
+from qeflow.utils import saveYaml
 from qeflow.logger import Logger
 
 
-class Workflow(object):
-    def __init__(self, inputs, logger = Logger()) -> None:
-        self.logger = logger
-        self.workflow = createWorkflow(inputs.inp, self.logger)
-        with open(inputs.inp['workflow_path'], 'w') as wf:
-            yaml.dump(self.workflow, wf)
-
-
-def createWorkflow(inp, logger = Logger()):
+def createWorkflow(inp, cfg, logger = Logger()):
     '''
     Returns a list of dictionaries. Each dictionary is the input of a specific code in the workflow.
     Also, each dictionary is the cartesian product of the `withrespectto` flag entries.
@@ -57,7 +49,10 @@ def createWorkflow(inp, logger = Logger()):
     for i, task in enumerate(taskDicts):
         task['fileNameIn'] = f'{i:02d}.in'
         task['fileNameOut'] = f'{i:02d}.out'
+        # task['executable'] = 
     
+    saveYaml(taskDicts, inp['workflow_path'])
+
     return taskDicts
 
 
@@ -77,3 +72,5 @@ keysToRemove = [
     'partition',
     'qos',
 ]
+
+
