@@ -28,7 +28,7 @@ def createSlurm(inp, cfg, workflow, logger = Logger()):
         }
     # define the python environment
     if 'pyenv' in cfg.keys():
-        slurmInp['pyenvBlock'] = f'source {cfg['pyenv']}'
+        slurmInp['pyenvBlock'] = f'source {cfg["pyenv"]}'
     else:
         slurmInp['pyenvBlock'] = ''
     
@@ -47,7 +47,7 @@ def createSlurm(inp, cfg, workflow, logger = Logger()):
     for i, work in enumerate(workflow):
         task = work['task']
         text += f'srun --nodes=1 --ntasks=1 --ntasks-per-node=1 --exact --mem=1500M qeflow {workflowPath} -i {i}\n'
-        text += f'srun {cfg[task]} {work['fileNameIn']} >> {work['fileNameOut']}\n'
+        text += f'srun {cfg[task]} -in {work["fileNameIn"]} >> {work["fileNameOut"]}\n'
 
     slurmInp['srunBlock'] = text
     
@@ -55,10 +55,10 @@ def createSlurm(inp, cfg, workflow, logger = Logger()):
     with open(slurmPath, 'w') as slurmfile:
         slurmfile.write(slurmSkel.format(**slurmInp))
     
+    return slurmPath
 
 
-slurmSkel = '''
-#!/bin/bash --login
+slurmSkel = '''#!/bin/bash --login
 
 #SBATCH --job-name={job_name}
 #SBATCH --nodes={nodes}

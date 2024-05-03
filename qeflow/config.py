@@ -45,18 +45,18 @@ def readConfig(logger = Logger()):
     
     # definition of all the executables for any given task
     execDict = {
-        'scf' : f'{configs['pwx']}',
-        'nscf' : f'{configs['pwx']}',
-        'bands' : f'{configs['bandsx']}',
-        'relax' : f'{configs['pwx']}',
-        'vc-relax' : f'{configs['pwx']}',
-        'md' : f'{configs['pwx']}',
-        'vc-md' : f'{configs['pwx']}',
-        'dos' : f'{configs['dosx']}',
-        'ph' : f'{configs['phx']}',
-        'w90' : f'{configs['w90x']}',
-        'w90pp' : f'{configs['w90x']} -pp',
-        'pw2w90' : f'{configs['pw2w90x']}',
+        'scf' : f'{configs["pwx"]}',
+        'nscf' : f'{configs["pwx"]}',
+        'bands' : f'{configs["bandsx"]}',
+        'relax' : f'{configs["pwx"]}',
+        'vc-relax' : f'{configs["pwx"]}',
+        'md' : f'{configs["pwx"]}',
+        'vc-md' : f'{configs["pwx"]}',
+        'dos' : f'{configs["dosx"]}',
+        'ph' : f'{configs["phx"]}',
+        'w90' : f'{configs["w90x"]}',
+        'w90pp' : f'{configs["w90x"]} -pp',
+        'pw2w90' : f'{configs["pw2w90x"]}',
     }
 
     # join averything into the configs dictionary

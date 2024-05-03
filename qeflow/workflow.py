@@ -1,9 +1,10 @@
 import itertools
 from qeflow.utils import saveYaml
 from qeflow.logger import Logger
+import os
 
 
-def createWorkflow(inp, cfg, logger = Logger()):
+def createWorkflow(inp, logger = Logger()):
     '''
     Returns a list of dictionaries. Each dictionary is the input of a specific code in the workflow.
     Also, each dictionary is the cartesian product of the `withrespectto` flag entries.
@@ -47,9 +48,8 @@ def createWorkflow(inp, cfg, logger = Logger()):
             taskDicts.append(aux)
     
     for i, task in enumerate(taskDicts):
-        task['fileNameIn'] = f'{i:02d}.in'
-        task['fileNameOut'] = f'{i:02d}.out'
-        # task['executable'] = 
+        task['fileNameIn'] = os.path.join(inp['calc_dir'], f'{i:02d}.in')
+        task['fileNameOut'] = os.path.join(inp['calc_dir'], f'{i:02d}.out')
     
     saveYaml(taskDicts, inp['workflow_path'])
 

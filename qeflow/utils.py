@@ -1,4 +1,5 @@
 
+from subprocess import run, PIPE
 from yaml import safe_load, dump
 import os
 from qeflow.logger import Logger
@@ -29,3 +30,8 @@ def createDir(dir, logger = Logger()):
         logger.info(f" * directory already exists.", 2)
 
 
+def runProcess(command, inputFile):
+    with open(inputFile, 'r') as inp:
+        process = run(command.split(), stdin=inp, stdout=PIPE, stderr=PIPE, shell=False, text=True)
+        #process = run(command.split(), stdin=inp, shell=False, text=True)
+    return process
