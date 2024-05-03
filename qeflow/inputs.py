@@ -2,13 +2,13 @@ from qeflow.constants import CWD
 from qeflow.logger import Logger
 from qeflow.utils import readYaml
 import os
-import itertools
 
 
 class Inputs(object):
     def __init__(self, path, logger = Logger()) -> None:
         self.logger = logger
         self.path = path
+        self.logger.info(f'\n--------------------------------', 1)
         self.logger.info(f'Reading input file from:\n   {path}', 1)
         inp = readYaml(self.path)
         inp = checkInput(inp, self.logger)
@@ -64,10 +64,6 @@ def checkInput(inp, logger = Logger()):
         for wrongKey in wrongKeys:
             logger.info(f' * Error: `{wrongKey}` workflow task not recognised.')
         raise Exception('WrongKeyError')
-    
-    # we make a new entry for the actual tasks
-    # e.g. inp['tasks'] = [relax, scf, bands]
-    inp['tasks'] = tasks
 
     # checking withrespectto flag
     if 'withrespectto' in inp.keys():
@@ -80,62 +76,17 @@ def checkInput(inp, logger = Logger()):
 
     # reformat paths to absolute paths
     inp['name'] = os.path.abspath(os.path.join(CWD, inp['name']))
+
+    # at last, we define some new entries
+    inp['tasks'] = tasks           # e.g. inp['tasks'] = [relax, scf, bands]
+    inp['calc_dir'] = os.path.abspath(os.path.join(inp['name'], 'calc'))
+    inp['res_dir'] = os.path.abspath(os.path.join(inp['name'], 'results'))
+    inp['logger_path'] = os.path.abspath(os.path.join(inp['name'], 'log.txt'))
+    inp['workflow_path'] = os.path.abspath(os.path.join(inp['name'], 'workflow.txt'))
     return inp
 
 
-def createTasks(inp, logger = Logger()):
-    '''
-    Returns a list of dictionaries. Each dictionary is the input of a specific code in the workflow.
-    Also, each dictionary is the cartesian product of the `withrespectto` flag entries.
-    '''
 
-    keys = []
-    table = []
-    for wrt in inp['withrespectto']:
-        for k, v in wrt.items():
-            keys.append(k)
-            table.append(v)
-    flat_table = itertools.product(*table)
-
-    wrtDicts = []
-    for values in flat_table:
-        aux = {}
-        for k,v in zip(keys, values):
-            aux[k] = v
-        wrtDicts.append(aux)
-
-    # merging dictionary default | explicit, explicit keys overwrite the default ones
-    flowDicts = []
-    for work, task in zip(inp['workflow'], inp['tasks']):
-        aux = inp | work[task]
-        # del aux['workflow']
-        # del aux['tasks']
-        # del aux['withrespectto']
-        # del aux['nprocs']
-        # del aux['time']
-        # del aux['partition']
-        # del aux['qos']
-        aux['task'] = task
-        flowDicts.append(aux)
-    
-    # merge all dicts together
-    logger.info(f'Workflow that will be performed:', 1)
-    for task in inp['tasks']:
-        logger.info(f' * {task}', 1)
-    taskDicts = []
-    logger.info(f'Each workflow will iterate {len(wrtDicts)} times.', 1)
-    logger.info(f'Iterating parameters:', 1)
-    for wrt in wrtDicts:
-        logger.info(f' * { wrt }', 1)
-        for flow in flowDicts:
-            aux = flow | wrt
-            taskDicts.append(aux)
-    
-    for i, task in enumerate(taskDicts):
-        task['fileNameIn'] = f'{i:02d}.in'
-        task['fileNameOut'] = f'{i:02d}.out'
-    
-    return taskDicts
 
 
 _correctKeys = [

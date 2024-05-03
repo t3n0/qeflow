@@ -27,10 +27,7 @@ class Logger(object):
         self.log.close()
         return contents
     
-    def saveLog(self, path):
-        if os.path.exists(path):
-            with open(path, 'a') as logfile:
-                logfile.write(self.getLog())
-        else:
-            with open(path, 'w') as logfile:
-                logfile.write(self.getLog())
+    def saveLog(self, path, mode='w'):
+        with open(path, mode) as logfile:
+            logfile.write(self.getLog())
+        

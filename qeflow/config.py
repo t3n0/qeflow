@@ -16,6 +16,7 @@ class Config(object):
             cfgFilePath = None
         
         if cfgFilePath:
+            self.logger.info(f'\n--------------------------------', 1)
             self.logger.info(f'Reading configuration file from:\n   {cfgFilePath}', 1)
             configs = readYaml(cfgFilePath)
 

@@ -1,5 +1,7 @@
 
 from yaml import safe_load
+import os
+from qeflow.logger import Logger
 
 def readYaml(path):
     '''
@@ -8,3 +10,15 @@ def readYaml(path):
     with open(path,'r') as f: 
         data = safe_load(f)
     return data
+
+
+def createDir(dir, logger = Logger()):
+    '''
+    Creates a folder if it does not exist already.
+    '''
+    logger.info(f"Creating new directory:\n   {dir}", 1)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+        logger.info(f" * directory created successfully.", 2)
+    else:
+        logger.info(f" * directory already exists.", 2)
