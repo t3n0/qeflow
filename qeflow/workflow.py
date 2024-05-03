@@ -48,8 +48,8 @@ def createWorkflow(inp, logger = Logger()):
             taskDicts.append(aux)
     
     for i, task in enumerate(taskDicts):
-        task['fileNameIn'] = os.path.join(inp['calc_dir'], f'{i:02d}.in')
-        task['fileNameOut'] = os.path.join(inp['calc_dir'], f'{i:02d}.out')
+        task['fileNameIn'] = os.path.join(inp['calc_dir'], f'{i:03d}.in')
+        task['fileNameOut'] = os.path.join(inp['calc_dir'], f'{i:03d}.out')
     
     saveYaml(taskDicts, inp['workflow_path'])
 
