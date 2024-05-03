@@ -60,10 +60,19 @@ def checkInput(inp, logger = Logger()):
         raise Exception('WrongKeyError')
 
     # checking withrespectto flag
+    logger.info(f'Checking for wrong `withrespectto` flags.', 1)
     if 'withrespectto' in inp.keys():
         if type(inp['withrespectto']) != list:
             logger.info(f' * Error: `withrespectto` must be a list of dictionaries.')
             raise Exception('WrongKeyError')
+        else:
+            wrts = inp['withrespectto']
+            for wrt in wrts:
+                wrongKeys = [key for key in wrt.keys() if key in notAllowedWrtKeys]
+                if len(wrongKeys)>0:
+                    for wrongKey in wrongKeys:
+                        logger.info(f' * Error: `{wrongKey}` is not a valid `withrespectto` iteration.')
+                    raise Exception('WrongKeyError')
 
     # set default keys
     inp = _defaultKeys | inp
@@ -135,3 +144,9 @@ _defaultKeys = {
     'qos' : 'short',
     'withrespectto' : [],}
 
+notAllowedWrtKeys = [
+    'nprocs',
+    'time',
+    'partition',
+    'qos',
+]
