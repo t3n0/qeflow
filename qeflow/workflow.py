@@ -10,20 +10,29 @@ def createWorkflow(inp, logger = Logger()):
     Also, each dictionary is the cartesian product of the `withrespectto` flag entries.
     '''
 
-    keys = []
-    table = []
+    params = []
+    valuesList = []
     for wrt in inp['withrespectto']:
         for k, v in wrt.items():
-            keys.append(k)
-            table.append(v)
-    flat_table = itertools.product(*table)
+            params.append(k)
+            valuesList.append(v)
+    #product = [list(p) for p in itertools.product(*valuesList)]
+    product = list(itertools.product(*valuesList))
 
     wrtDicts = []
-    for values in flat_table:
+    for values in product:
         aux = {}
-        for k,v in zip(keys, values):
+        for k,v in zip(params, values):
             aux[k] = v
         wrtDicts.append(aux)
+
+    data = {}
+
+    print(params)
+    print(product)
+    for i, par in enumerate(params):
+        data[par] = [product[j][i] for j in range(len(product))] #series[:,i]
+    print('data: ', data)
 
     # merging dictionary default | explicit, explicit keys overwrite the default ones
     flowDicts = []
