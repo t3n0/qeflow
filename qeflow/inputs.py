@@ -114,6 +114,8 @@ _correctKeys = [
 'verbosity',
 
 'kpoints',
+'kpoints_mode',
+'kpoints_offset',
 'lspinorb',
 'noncolin',
 'nosym',

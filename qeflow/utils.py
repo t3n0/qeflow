@@ -3,6 +3,7 @@ from subprocess import run, PIPE
 from yaml import safe_load, dump
 import os
 from qeflow.logger import Logger
+from qeflow.pwx import Pwx
 
 def readYaml(path):
     '''
@@ -41,8 +42,16 @@ def runProcess(command, inputFile):
     return process
 
 
-def runTask(task):
-    pass
+def runWork(work, logger = Logger()):
+    tasks = work['tasks']
+    for task in tasks:
+        if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
+            logger.info(f'Running task {task['task']} on pw.x', 1)
+            runner = Pwx(task)
+        elif task['task'] in ['w90', 'w90pp']:
+            logger.info(f'Running task {task['task']} on wannier90.x', 1)
+
+    
 
 
 def appendResults(task):

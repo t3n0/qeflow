@@ -36,12 +36,7 @@ def createWorkflow(inp, logger = Logger()):
     # also, if there is no wrt flag (i.e. we only perform one workflow)
     # all tasks will be performed in the same folder
     for i, domain in enumerate(domainDictList):
-        workflow_this_domain = {}
-        # define the folder
-        if inp['overwrite'] == True or len(domainDictList) == 1:
-            workflow_this_domain['work_dir'] = inp['calc_dir']
-        else:
-            workflow_this_domain['work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
+        workflow_this_domain = {}        
         # define the tasks
         workflow_this_domain['tasks'] = []
         for j, (work, task) in enumerate(zip(inp['workflow'], inp['tasks'])):
@@ -50,8 +45,12 @@ def createWorkflow(inp, logger = Logger()):
             aux = removeKeys(aux, keysToRemove)
             # adding some new flags
             aux['task'] = task
-            aux['fileNameIn'] = os.path.join(workflow_this_domain['work_dir'], f'{j:02d}.{task}.in')
-            aux['fileNameOut'] = os.path.join(workflow_this_domain['work_dir'], f'{j:02d}.{task}.out')
+            if inp['overwrite'] == True or len(domainDictList) == 1:
+                aux['work_dir'] = inp['calc_dir']
+            else:
+                aux['work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
+            aux['fileNameIn'] = os.path.join(aux['work_dir'], f'{j:02d}.{task}.in')
+            aux['fileNameOut'] = os.path.join(aux['work_dir'], f'{j:02d}.{task}.out')
             workflow_this_domain['tasks'].append(aux)
         workflowList.append(workflow_this_domain)
     
