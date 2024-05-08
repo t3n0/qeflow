@@ -96,6 +96,7 @@ _correctKeys = [
 'workflow',
 'withrespectto',
 'name',
+'overwrite',
 'nprocs',
 'time',
 'partition',
@@ -142,11 +143,13 @@ _defaultKeys = {
     'time' : '0:20:0',
     'partition' : 'standard',
     'qos' : 'short',
-    'withrespectto' : [],}
+    'withrespectto' : [],
+    'overwrite' : True}
 
 notAllowedWrtKeys = [
     'nprocs',
     'time',
     'partition',
     'qos',
+    'overwrite',
 ]

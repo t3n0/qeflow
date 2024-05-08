@@ -39,3 +39,11 @@ def runProcess(command, inputFile):
         process = run(command.split(), stdin=inp, stdout=PIPE, stderr=PIPE, shell=False, text=True)
         #process = run(command.split(), stdin=inp, shell=False, text=True)
     return process
+
+
+def runTask(task):
+    pass
+
+
+def appendResults(task):
+    pass
