@@ -11,34 +11,31 @@ class Pwx(object):
         inp contains the actual qe flags to generate the input file for pw.x
         and also all the metadata necessary to qeflow to save, retrieve and manipulate the calculation
         '''
-        # define the missing mandatory parameters
         userInp = {
             'calc' : inp['task'],
             'outdir' : os.path.join(inp['work_dir'], 'outdir'),
             'pseudo_dir' : os.path.abspath(os.path.join(CWD, inp['pseudo_dir'])),
             'nat' : len(inp['positions']),
-            'ntyp' : len(inp['atoms']),
-            }
-        
+            'ntyp' : len(inp['atoms']),}
         inp = defaultKeys | inp
-    
         userInp['atomicSpeciesBlock'] = atomicSpeciesBlock(inp)
         userInp['atomicPositionsBlock'] = atomicPositionsBlock(inp)
         userInp['kPointsBlock'] = kPointsBlock(inp, inp['kpoints_mode'])
         userInp['cellParametersBlock'] = unitCellBlock(inp)
         userInp['ionsBlock'] = ionsBlock(inp)
         userInp['cellBlock'] = cellBlock(inp)
-        
 
         self.text = pwxSkel.format(**(inp | userInp))
-        print(self.text)
+        
+
+    def saveToFile(self, path):
+        os.makedirs(os.path.dirname(path), exist_ok=True) # creates the necessary folders
+        with open(path, 'w') as f: 
+            f.write(self.text)
 
 
-def savePwx(inp, path):
-    pass
-
-def parsePwx(path):
-    pass
+    def parsePwx(path):
+        pass
 
 
 def unitCellBlock(inp):
@@ -63,10 +60,13 @@ def atomicPositionsBlock(inp):
     # no implemented flags: if_pos(1), if_pos(2), if_pos(3)
     # maybe in the future
     pos = inp['positions']
-    text = 'ATOMIC_POSITIONS angstrom\n'
-    text += f'  {pos[0][0]} {pos[0][1]} {pos[0][2]} {pos[0][3]}\n'
-    text += f'  {pos[1][0]} {pos[1][1]} {pos[1][2]} {pos[1][3]}\n'
-    text += f'  {pos[2][0]} {pos[2][1]} {pos[2][2]} {pos[2][3]}\n'
+    if pos == 'vc-relax':
+        print('helloooooooooooooooooooooo')
+    else:
+        text = 'ATOMIC_POSITIONS angstrom\n'
+        text += f'  {pos[0][0]} {pos[0][1]} {pos[0][2]} {pos[0][3]}\n'
+        text += f'  {pos[1][0]} {pos[1][1]} {pos[1][2]} {pos[1][3]}\n'
+        text += f'  {pos[2][0]} {pos[2][1]} {pos[2][2]} {pos[2][3]}\n'
     return text
 
 

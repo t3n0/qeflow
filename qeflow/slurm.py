@@ -4,7 +4,7 @@ from math import ceil
 import os
 
 
-def createSlurm(inp, cfg, workflow, logger = Logger()):
+def createSlurm(inp, cfg, wfList, logger = Logger()):
     # define nodes and task_per_node
     logger.info(f'\n--------------------------------', 1)
     logger.info(f'Initialising Slurm script.', 1)
@@ -49,14 +49,16 @@ def createSlurm(inp, cfg, workflow, logger = Logger()):
     text = ''
     workflowPath = inp['workflow_path']
     logger.info(f'Appending tasks to slurm batch file.', 1)
-    for i, work in enumerate(workflow):
-        task = work['task']
-        text += f'srun --nodes=1 --ntasks=1 --ntasks-per-node=1 --exact --mem=1500M qeflow {workflowPath} -i {i}\n'
-        text += f'srun {cfg[task]} -in {work["fileNameIn"]} >> {work["fileNameOut"]}\n'
+    for i, work in enumerate(wfList):
+        for j, task in enumerate(work):
+            text += f'srun --nodes=1 --ntasks=1 --ntasks-per-node=1 --exact --mem=1500M qetask {workflowPath} -i {i} -j {j}\n'
+            text += f'srun {cfg[task["task"]]} -in {task["fileNameIn"]} >> {task["fileNameOut"]}\n'
+            text += f'srun --nodes=1 --ntasks=1 --ntasks-per-node=1 --exact --mem=1500M qeparse {workflowPath} -i {i} -j {j}\n'
 
     slurmInp['srunBlock'] = text
     
     slurmPath = os.path.join(inp['calc_dir'], 'slurm.sub')
+    os.makedirs(os.path.dirname(slurmPath), exist_ok=True) # creates the necessary folders
     logger.info(f'Saving slurm batch file to disk:\n   {slurmPath}', 1)
     with open(slurmPath, 'w') as slurmfile:
         slurmfile.write(slurmSkel.format(**slurmInp))

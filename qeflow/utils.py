@@ -5,6 +5,7 @@ import os
 from qeflow.logger import Logger
 from qeflow.pwx import Pwx
 
+
 def readYaml(path):
     '''
     Reads and returns the YAML dictionary.
@@ -15,6 +16,7 @@ def readYaml(path):
 
 
 def saveYaml(data, path):
+    os.makedirs(os.path.dirname(path), exist_ok=True) # creates the necessary folders
     with open(path, 'w') as wf:
             dump(data, wf)
 
@@ -42,15 +44,17 @@ def runProcess(command, inputFile):
     return process
 
 
-def runWork(work, logger = Logger()):
-    tasks = work['tasks']
-    for task in tasks:
+def runWork(workflow, logger = Logger()):
+    '''
+    This function runs a single workflow, i.e. it runs a set of tasks with the same `wrt` domain.
+    '''
+    for task in workflow:
         if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
             logger.info(f'Running task {task['task']} on pw.x', 1)
             runner = Pwx(task)
         elif task['task'] in ['w90', 'w90pp']:
             logger.info(f'Running task {task['task']} on wannier90.x', 1)
-
+        runner.saveToFile(task['fileNameIn'])
     
 
 

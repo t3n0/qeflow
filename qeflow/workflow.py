@@ -6,52 +6,47 @@ import os
 
 def createWorkflow(inp, logger = Logger()):
     '''
-    Returns a list of dictionaries. Each dictionary is the input of a specific code in the workflow.
-    Also, each dictionary is the cartesian product of the `withrespectto` flag entries.
+    Returns a list of lists:
+        workflowList = [
+            workflow1,
+            workflow2,
+            etc,
+        ]
+    Where each workflow is a list of tasks, for a given `wrt` flag:
+        workflow1 = [scf, nscf, dos], with ecutwfc = 40
+        workflow2 = [scf, nscf, dos], with ecutwfc = 60
+        etc
     '''
 
-    # this will be dump in the workflow json
-    # it is the list of all workflows ordered by the domain entry
     workflowList = []
 
-    # some logging
     logger.info(f'\n--------------------------------', 1)
     logger.info(f'Workflow that will be performed:', 1)
     for task in inp['tasks']:
         logger.info(f' * {task}', 1)
     
     # define the domain of the wrt parameters
-    # if the wrt flag is not given the domain is a list with only one element, an empty dictionary
-    # domainDictList = [ {} ]
+    # if the wrt flag is not given, domainDictList = [ {} ]
     paramNames, paramValues = listProduct(inp['withrespectto'])
     domainDictList = dictProduct(paramNames, paramValues)
 
-    # some logging
     logger.info(f'Each workflow will iterate {len(domainDictList)} times.', 1)
     logger.info(f'Iterating parameters:', 1)
     for wrt in domainDictList:
         logger.info(f' * { wrt }', 1)
 
-    # if overwrite is true, all workflows will be performed in the same folder
-    # also, if there is no wrt flag (i.e. we only perform one workflow)
-    # all tasks will be performed in the same folder
     for i, domain in enumerate(domainDictList):
-        workflow_this_domain = {}        
-        # define the tasks
-        workflow_this_domain['tasks'] = []
+        workflow_this_domain = []
         for j, (work, task) in enumerate(zip(inp['workflow'], inp['tasks'])):
             # we dump all the key-values from the main input file
-            aux = (inp | work[task]) | domain
-            aux = removeKeys(aux, keysToRemove)
+            thisTask = (inp | work[task]) | domain
+            thisTask = removeKeys(thisTask, keysToRemove)
             # adding some new flags
-            aux['task'] = task
-            if inp['overwrite'] == True or len(domainDictList) == 1:
-                aux['work_dir'] = inp['calc_dir']
-            else:
-                aux['work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
-            aux['fileNameIn'] = os.path.join(aux['work_dir'], f'{j:02d}.{task}.in')
-            aux['fileNameOut'] = os.path.join(aux['work_dir'], f'{j:02d}.{task}.out')
-            workflow_this_domain['tasks'].append(aux)
+            thisTask['task'] = task
+            thisTask['work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
+            thisTask['fileNameIn'] = os.path.join(thisTask['work_dir'], f'{j:02d}.{task}.in')
+            thisTask['fileNameOut'] = os.path.join(thisTask['work_dir'], f'{j:02d}.{task}.out')
+            workflow_this_domain.append(thisTask)
         workflowList.append(workflow_this_domain)
     
     # some logginh and saving to disk
@@ -105,7 +100,6 @@ keysToRemove = [
     'time',
     'partition',
     'qos',
-    'overwrite',
 ]
 
 

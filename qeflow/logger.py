@@ -28,6 +28,7 @@ class Logger(object):
         return contents
     
     def saveLog(self, path, mode='w'):
+        os.makedirs(os.path.dirname(path), exist_ok=True) # creates the necessary folders
         with open(path, mode) as logfile:
             logfile.write(self.getLog())
         

@@ -18,7 +18,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python"]
 
-dependencies = []
+dependencies = ['xmltodict', 'pyyaml']
 
 # dynamic version
 dynamic = ["version"]
