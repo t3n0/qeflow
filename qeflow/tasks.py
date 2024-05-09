@@ -5,15 +5,15 @@ from qeflow.pwx import createPwx
 
 def createTask(task, logger = Logger()):
     if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
-        logger.info(f'Running task {task['task']} on pw.x', 1)
+        logger.info(f'   {task['task']} input file:\n   {task['fileNameIn']}', 2)
         createPwx(task)
 
 
-def runTask(task):
-    pass
+def runTask(task, logger = Logger()):
+    if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
+        pass
 
-
-def parseTask(task):
+def parseTask(task, logger = Logger()):
     pass
 
     
