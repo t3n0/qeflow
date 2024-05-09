@@ -38,5 +38,7 @@ Changelog = "https://github.com/t3n0/qeflow/blob/main/CHANGELOG.md"
 
 
 [project.scripts]
-qeflow = "qeflow.main:main"
+qeflow = "qeflow.main:qeflow"
+qetask = "qeflow.main:qetask"
+qeparse = "qeflow.main:qeparse"
 
