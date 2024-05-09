@@ -22,7 +22,7 @@ def readConfig(logger = Logger()):
         configs = readYaml(cfgFilePath)
 
         # check for wrong config keys
-        wrongKeys = [key for key in configs.keys() if key not in _correctKeys]
+        wrongKeys = [key for key in configs.keys() if key not in correctKeys]
         if len(wrongKeys)>0:
             for wrongKey in wrongKeys:
                 logger.info(f' * Error: `{wrongKey}` flag not recognised.')
@@ -37,11 +37,11 @@ def readConfig(logger = Logger()):
                 del configs[key]
         
         logger.info(f'Set missing configs with default ones.', 1)
-        configs = _defaultConfigs | configs
+        configs = defaultConfigs | configs
     else:
         logger.info(f'Configuration file is absent.', 1)
         logger.info(f' * default configuration will be used', 1)
-        configs = _defaultConfigs
+        configs = defaultConfigs
     
     # definition of all the executables for any given task
     execDict = {
@@ -69,7 +69,7 @@ def readConfig(logger = Logger()):
     return configs
     
 
-_correctKeys = {
+correctKeys = {
     'cluster',
     'account',
     'pyenv',
@@ -88,7 +88,7 @@ _correctKeys = {
     'mpirun_w90',
 }
 
-_defaultConfigs = {
+defaultConfigs = {
     'cluster' : 'local',
     'pwx' : 'pw.x',
     'phx' : 'ph.x',

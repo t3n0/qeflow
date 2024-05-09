@@ -18,7 +18,7 @@ def checkInput(inp, logger = Logger()):
     '''
 
     # checking for wrong input flags
-    wrongKeys = [key for key in inp.keys() if key not in _correctKeys]
+    wrongKeys = [key for key in inp.keys() if key not in correctKeys]
     logger.info(f'Checking for wrong input flags.', 1)
     if len(wrongKeys)>0:
         for wrongKey in wrongKeys:
@@ -53,7 +53,7 @@ def checkInput(inp, logger = Logger()):
     for work in inp['workflow']:
         tasks.append(list(work.keys())[0]) # append the *only* key of each work
     # tasks is now something like [relax, scf, bands]
-    wrongKeys = [key for key in tasks if key not in _correctWorkflow]
+    wrongKeys = [key for key in tasks if key not in correctWorkflow]
     if len(wrongKeys)>0:
         for wrongKey in wrongKeys:
             logger.info(f' * Error: `{wrongKey}` workflow task not recognised.')
@@ -75,7 +75,7 @@ def checkInput(inp, logger = Logger()):
                     raise Exception('WrongKeyError')
 
     # set default keys
-    inp = _defaultKeys | inp
+    inp = defaultKeys | inp
 
     # reformat paths to absolute paths
     inp['name'] = os.path.abspath(os.path.join(CWD, inp['name']))
@@ -92,7 +92,7 @@ def checkInput(inp, logger = Logger()):
 
 
 
-_correctKeys = [
+correctKeys = [
 'workflow',
 'withrespectto',
 'name',
@@ -126,7 +126,7 @@ _correctKeys = [
 'cell_dofree',]
 
 
-_correctWorkflow = [
+correctWorkflow = [
     'scf',
     'nscf',
     'bands',
@@ -138,7 +138,7 @@ _correctWorkflow = [
     'pw2w90',]
 
 
-_defaultKeys = {
+defaultKeys = {
     'name' : os.path.join(CWD, 'myflow'),
     'nprocs' : 1,
     'time' : '0:20:0',

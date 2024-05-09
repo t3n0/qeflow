@@ -3,7 +3,6 @@ from subprocess import run, PIPE
 from yaml import safe_load, dump
 import os
 from qeflow.logger import Logger
-from qeflow.pwx import Pwx
 
 
 def readYaml(path):
@@ -42,21 +41,3 @@ def runProcess(command, inputFile):
         process = run(command.split(), stdin=inp, stdout=PIPE, stderr=PIPE, shell=False, text=True)
         #process = run(command.split(), stdin=inp, shell=False, text=True)
     return process
-
-
-def runWork(workflow, logger = Logger()):
-    '''
-    This function runs a single workflow, i.e. it runs a set of tasks with the same `wrt` domain.
-    '''
-    for task in workflow:
-        if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
-            logger.info(f'Running task {task['task']} on pw.x', 1)
-            runner = Pwx(task)
-        elif task['task'] in ['w90', 'w90pp']:
-            logger.info(f'Running task {task['task']} on wannier90.x', 1)
-        runner.saveToFile(task['fileNameIn'])
-    
-
-
-def appendResults(task):
-    pass

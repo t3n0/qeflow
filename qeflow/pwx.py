@@ -1,41 +1,32 @@
 '''
-Class for the pw.x executable
+Functions for the pw.x executable
 '''
 
 from qeflow.constants import *
 
-class Pwx(object):
-    def __init__(self, inp: dict) -> None:
-        '''
-        inp is the dictionary with all the key-value pairs necessary for a pw.x calculation
-        inp contains the actual qe flags to generate the input file for pw.x
-        and also all the metadata necessary to qeflow to save, retrieve and manipulate the calculation
-        '''
-        userInp = {
-            'calc' : inp['task'],
-            'outdir' : os.path.join(inp['work_dir'], 'outdir'),
-            'pseudo_dir' : os.path.abspath(os.path.join(CWD, inp['pseudo_dir'])),
-            'nat' : len(inp['positions']),
-            'ntyp' : len(inp['atoms']),}
-        inp = defaultKeys | inp
-        userInp['atomicSpeciesBlock'] = atomicSpeciesBlock(inp)
-        userInp['atomicPositionsBlock'] = atomicPositionsBlock(inp)
-        userInp['kPointsBlock'] = kPointsBlock(inp, inp['kpoints_mode'])
-        userInp['cellParametersBlock'] = unitCellBlock(inp)
-        userInp['ionsBlock'] = ionsBlock(inp)
-        userInp['cellBlock'] = cellBlock(inp)
 
-        self.text = pwxSkel.format(**(inp | userInp))
-        
+def createPwx(inp: dict):
+    '''
+    Creates a pw.x input file based on the `inp` dictionary
+    '''
+    userInp = {
+        'calc' : inp['task'],
+        'outdir' : os.path.join(inp['work_dir'], 'outdir'),
+        'pseudo_dir' : os.path.abspath(os.path.join(CWD, inp['pseudo_dir'])),
+        'nat' : len(inp['positions']),
+        'ntyp' : len(inp['atoms']),}
+    inp = defaultKeys | inp
+    userInp['atomicSpeciesBlock'] = atomicSpeciesBlock(inp)
+    userInp['atomicPositionsBlock'] = atomicPositionsBlock(inp)
+    userInp['kPointsBlock'] = kPointsBlock(inp, inp['kpoints_mode'])
+    userInp['cellParametersBlock'] = unitCellBlock(inp)
+    userInp['ionsBlock'] = ionsBlock(inp)
+    userInp['cellBlock'] = cellBlock(inp)
 
-    def saveToFile(self, path):
-        os.makedirs(os.path.dirname(path), exist_ok=True) # creates the necessary folders
-        with open(path, 'w') as f: 
-            f.write(self.text)
-
-
-    def parsePwx(path):
-        pass
+    text = pwxSkel.format(**(inp | userInp))
+    os.makedirs(os.path.dirname(inp['fileNameIn']), exist_ok=True) # creates the necessary folders
+    with open(inp['fileNameIn'], 'w') as f: 
+        f.write(text)
 
 
 def unitCellBlock(inp):
