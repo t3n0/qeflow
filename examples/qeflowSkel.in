@@ -14,50 +14,67 @@
 
 ########################### Workflow flags ##########################
 
-name:               # dir path where to save this run, default `./pollo`
-workflow:
+name:                           # directory where to save this run
+                                # default `myflow`
+
+workflow:                       # workflow is a list of tasks
     - vc-relax
     - scf:
-        kpoints: [4,4,1]
+        kpoints: [4,4,1]        # each task can also take arguments
+                                # these arguments overwrite the default ones
     - nscf:
         kpoints: [8,8,1]
         kpoints_mode: crystal
     
 
-withrespectto:
+withrespectto:                  # wrt flag specifies a list of parameters
+                                # can be left empty, i.e. no iterations
+                                # default is empty
+    - ecutwfc: [40, 60, 80]     # each parameter is itself a list
+                                # the workflow will iterate over these parameters
 
 ######################### Optional parameters #######################
 
-nprocs    :  # 350 # 1, number of mpi processes to launch
-time      :    # hh:mm:ss, requested time for a HPC job, default 0:20:0
-partition :    # default is standard
-qos       :    # default is short
+nprocs:                         # number of mpi processes to launch
+                                # default 1
+time:                           # hh:mm:ss, requested time for a HPC job
+                                # default 0:20:0
+partition:                      # default is standard
+qos:                            # default is short
 
 ############################## QE flags #############################
 
-pseudo_pots    : [W.rel-pbe-us-wfc8-z14.upf, Se.rel-pbe-us-wfc3-z6.upf]
-atoms          : [W, Se]
-masses         : [183.84, 78.96]
-positions      : [[W,  0.0,    0.0,     0.0],
-                  [Se, 0.0, 1.9035,  1.6747],
-                  [Se, 0.0, 1.9035, -1.6747]]
-unit_cell      : [[3.2970,    0.0,   0.0],
-                  [1.6485, 2.8553,   0.0],
-                  [   0.0,    0.0, 32.97]]
+##### MANDATORY #####
+pseudo_pots     : [pp1, pp2, pp3]               # list of pseudo potentials
 
-kpoints        : [4, 4, 1]
-kpoints_mode   : automatic
-kpoints_offset : [0, 0, 0]
-nbnd           : 
-prefix         :  pollo 
-pseudo_dir     :  /home/tentacolo/Documents/Physics/Projects/pseudopot
-ecutwfc        :  50         
-assume_isolated : 
-cell_dofree    : 2Dxy
-conv_thr       :  1e-8       
-mixing_beta    :  0.7        
-restart        :  
-lspinorb       : True
-noncolin       : True
+atoms           : [atom1, atom2, atom3]         # list of atom symbols
+
+masses          : [mass1, mass2, mass3]         # list of atomic masses
+
+positions       : [[atom1,  posx, posy, posz],  # list of atomic positions
+                   [atom2,  posx, posy, posz],
+                   [atom3,  posx, posy, posz],
+                   [atom2,  posx, posy, posz]]
+
+unit_cell       : [[a1x, a1y, a1z],             # list of lattice vectors, angstrom
+                   [a2x, a2y, a2z],             # this is the ibrav = 0 case
+                   [a3x, a3y, a3z]]             # in the future i'll implement the other cases as well
+
+kpoints         : [n1, n2, n3]                  # kpoint M-P grid
 
 
+##### OPTIONAL #####
+prefix:                 # mycalc
+pseudo_dir:             # /HOME/ppdir
+verbosity:              # low
+nbnd:                   #
+ecutwfc:                # 50
+lspinorb:               # False
+noncolin:               # False
+nosym:                  # False
+assume_isolated:        # none
+conv_thr:               # 1e-8
+mixing_beta:            # 0.7
+kpoints_mode:           # automatic
+kpoints_offset:         # [0, 0, 0]
+cell_dofree:            # all

@@ -107,7 +107,6 @@ correctKeys = [
 'positions',
 'unit_cell',
 
-'restart',
 'prefix',
 'pseudo_dir',
 'verbosity',
