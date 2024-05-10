@@ -12,8 +12,12 @@ def createTask(task, logger = Logger()):
 
 def runTask(task, logger = Logger()):
     logger.info(f'   Running task {task['task']}...', 1, end='')
-    runProcess(task['command'], task['fileNameIn'])
-    logger.info(f'done.', 1)
+    process = runProcess(task['command'], task['fileNameIn'], task['fileNameOut'])
+    if process.returncode == 0:
+        logger.info(f' success.', 1)
+    else:
+        logger.info(f'\n   Task {task['task']} exited with status: {process.returncode}')
+        raise Exception('FailedTaskError')
 
 def parseTask(task, logger = Logger()):
     pass

@@ -20,6 +20,12 @@ def saveYaml(data, path):
             dump(data, wf)
 
 
+def saveFile(data, path, mode='w'):
+    os.makedirs(os.path.dirname(path), exist_ok=True) # creates the necessary folders
+    with open(path, mode) as f:
+        f.write(data)
+
+
 def createDir(dir, logger = Logger()):
     '''
     Creates a folder if it does not exist already.
