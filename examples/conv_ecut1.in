@@ -14,7 +14,7 @@ name: exampleSi
 workflow:
     - scf:
 withrespectto:
-    - ecutwfc: [60]
+    - ecutwfc: [60, 80, 100]
 
 
 ######################### Computation flags #########################

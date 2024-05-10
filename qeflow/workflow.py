@@ -4,7 +4,7 @@ from qeflow.logger import Logger
 import os
 
 
-def createWorkflow(inp, logger = Logger()):
+def createWorkflow(inp, cfg, logger = Logger()):
     '''
     Returns a list of lists:
         workflowList = [
@@ -44,6 +44,7 @@ def createWorkflow(inp, logger = Logger()):
             # adding some new flags
             thisTask['task'] = task
             thisTask['domain'] = domain
+            thisTask['command'] = f'{cfg['mpix']} -n {inp['nprocs']} {cfg[task]}'
             thisTask['work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
             thisTask['fileNameIn'] = os.path.join(thisTask['work_dir'], f'{j:02d}.{task}.in')
             thisTask['fileNameOut'] = os.path.join(thisTask['work_dir'], f'{j:02d}.{task}.out')
