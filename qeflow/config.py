@@ -84,8 +84,7 @@ correctKeys = {
     'plotbandx',
     'w90x',
     'pw2w90x',
-    'mpirun_qe',
-    'mpirun_w90',
+    'mpix',
 }
 
 defaultConfigs = {
@@ -99,6 +98,5 @@ defaultConfigs = {
     'plotbandx' : 'plotband.x',
     'w90x' : 'wannier90.x',
     'pw2w90x' : 'pw2wannier90.x',
-    'mpirun_qe' : 'mpirun',
-    'mpirun_w90' : 'mpirun',
+    'mpix' : 'mpirun',
 }

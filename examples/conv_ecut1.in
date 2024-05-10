@@ -33,7 +33,7 @@ unit_cell      : [[ 2.715, 2.715,   0.0 ],
                   [   0.0, 2.715, 2.715 ],
                   [ 2.715,   0.0, 2.715 ]]
 
-kpoints        : [4, 4, 1]
+kpoints        : [4, 4, 4]
 kpoints_mode   : automatic
 kpoints_offset : [0, 0, 0]
 prefix         :  silicon
