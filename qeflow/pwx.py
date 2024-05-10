@@ -55,9 +55,8 @@ def atomicPositionsBlock(inp):
         print('helloooooooooooooooooooooo')
     else:
         text = 'ATOMIC_POSITIONS angstrom\n'
-        text += f'  {pos[0][0]} {pos[0][1]} {pos[0][2]} {pos[0][3]}\n'
-        text += f'  {pos[1][0]} {pos[1][1]} {pos[1][2]} {pos[1][3]}\n'
-        text += f'  {pos[2][0]} {pos[2][1]} {pos[2][2]} {pos[2][3]}\n'
+        for p in pos:
+            text += f'  {p[0]} {p[1]} {p[2]} {p[3]}\n'
     return text
 
 

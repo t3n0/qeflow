@@ -36,8 +36,12 @@ def removeFile(name):
         os.remove(name)
 
 
-def runProcess(command, inputFile):
-    with open(inputFile, 'r') as inp:
-        process = run(command.split(), stdin=inp, stdout=PIPE, stderr=PIPE, shell=False, text=True)
+def runProcess(command, inputFile, outputFile=None):
+    if outputFile == None:
+        with open(inputFile, 'r') as inp:
+            process = run(command.split(), stdin=inp, stdout=PIPE, stderr=PIPE, shell=False, text=True)
+    else:
+        with open(inputFile, 'r') as inp, open(outputFile, 'w') as out:
+            process = run(command.split(), stdin=inp, stdout=out, stderr=PIPE, shell=False, text=True)
         #process = run(command.split(), stdin=inp, shell=False, text=True)
     return process
