@@ -3,6 +3,8 @@ Functions for the pw.x executable
 '''
 
 from qeflow.constants import *
+from qeflow.parsers import parseTotalEnergy, parseFermiEnergy
+from qeflow.utils import readYaml, saveYaml
 
 
 def createPwx(inp: dict):
@@ -34,7 +36,21 @@ def parsePwx(inp: dict):
     new_xml_path = os.path.join(inp['res_work_dir'], f'{inp['task_indices'][1]:02d}.{inp['task']}.xml')
     os.makedirs(os.path.dirname(new_xml_path), exist_ok=True) # creates the necessary folders
     os.rename(old_xml_path, new_xml_path)
-
+    data = readYaml(inp['dataFile'])
+    if inp['task'] == 'scf':
+        totalE = parseTotalEnergy(new_xml_path)
+        if 'totalE' in data.keys():
+            data['totalE'].append(totalE)
+        else:
+            data['totalE'] = [totalE]
+    elif inp['task'] == 'nscf':
+        fermiE = parseFermiEnergy(new_xml_path)
+        if 'fermiE' in data.keys():
+            data['fermiE'].append(fermiE)
+        else:
+            data['fermiE'] = [fermiE]
+    saveYaml(data, inp['dataFile'])
+    
 
 def unitCellBlock(inp):
     # only when ibrav = 0

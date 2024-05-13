@@ -20,6 +20,7 @@ def runTask(task, logger = Logger()):
         logger.info(f'\n   Task {task['task']} exited with status: {process.returncode}')
         raise Exception('FailedTaskError')
 
+
 def parseTask(task, logger = Logger()):
     if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
         parsePwx(task)

@@ -35,6 +35,9 @@ def createWorkflow(inp, cfg, logger = Logger()):
     for wrt in domainDictList:
         logger.info(f' * { wrt }', 1)
 
+    # path to the final database of results
+    dataFilePath = os.path.join(inp['res_dir'], f'{inp['prefix']}.txt')
+
     for i, domain in enumerate(domainDictList):
         workflow_this_domain = []
         for j, (work, task) in enumerate(zip(inp['workflow'], inp['tasks'])):
@@ -42,6 +45,7 @@ def createWorkflow(inp, cfg, logger = Logger()):
             thisTask = (inp | work[task]) | domain
             thisTask = removeKeys(thisTask, keysToRemove)
             # adding some new flags
+            thisTask['dataFile'] = dataFilePath
             thisTask['task'] = task
             thisTask['domain'] = domain
             thisTask['task_indices'] = [i,j]
@@ -57,13 +61,16 @@ def createWorkflow(inp, cfg, logger = Logger()):
     logger.info(f'Save workflow file to disk:\n   {inp['workflow_path']}', 1)
     saveYaml(workflowList, inp['workflow_path'])
 
-    # # data is the dictionary of the results
-    # # we start by filling it with the domain parameters
-    # # e.g. data['ecutwfc'] = [20, 20, 40, 40]
-    # # e.g. data['ecutrho'] = [200, 400, 200, 400]
-    # data = {}
-    # for i, par in enumerate(params):
-    #     data[par] = [product[j][i] for j in range(len(product))]
+    # data is the dictionary of the results
+    # we start by filling it with the domain parameters
+    # e.g. data['ecutwfc'] = [20, 20, 40, 40]
+    # e.g. data['ecutrho'] = [200, 400, 200, 400]
+    data = {}
+    for i, par in enumerate(paramNames):
+        data[par] = [paramValues[j][i] for j in range(len(paramValues))]
+
+    logger.info(f'Save database file to disk:\n   {dataFilePath}', 1)
+    saveYaml(data, dataFilePath)
 
     return workflowList
 
