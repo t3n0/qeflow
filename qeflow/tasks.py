@@ -2,6 +2,7 @@
 from qeflow.logger import Logger
 from qeflow.utils import runProcess
 from qeflow.pwx import createPwx
+import os
 
 
 def createTask(task, logger = Logger()):
@@ -20,6 +21,7 @@ def runTask(task, logger = Logger()):
         raise Exception('FailedTaskError')
 
 def parseTask(task, logger = Logger()):
+    #os.rename(task['work_dir']+'/outdir/silicon.xml', task['work_dir']+f'/outdir/silicon{j}.xml')
     pass
 
     

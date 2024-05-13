@@ -45,9 +45,10 @@ def createWorkflow(inp, cfg, logger = Logger()):
             thisTask['task'] = task
             thisTask['domain'] = domain
             thisTask['command'] = f'{cfg['mpix']} -n {inp['nprocs']} {cfg[task]}'
-            thisTask['work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
-            thisTask['fileNameIn'] = os.path.join(thisTask['work_dir'], f'{j:02d}.{task}.in')
-            thisTask['fileNameOut'] = os.path.join(thisTask['work_dir'], f'{j:02d}.{task}.out')
+            thisTask['calc_work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
+            thisTask['res_work_dir'] = os.path.join(inp['res_dir'], f'w{i:03d}')
+            thisTask['fileNameIn'] = os.path.join(thisTask['calc_work_dir'], f'{j:02d}.{task}.in')
+            thisTask['fileNameOut'] = os.path.join(thisTask['calc_work_dir'], f'{j:02d}.{task}.out')
             workflow_this_domain.append(thisTask)
         workflowList.append(workflow_this_domain)
     

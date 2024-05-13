@@ -13,6 +13,8 @@
 name: exampleSi
 workflow:
     - scf:
+    - nscf:
+        kpoints: [8,8,8]
 withrespectto:
     - ecutwfc: [60, 80, 100]
 

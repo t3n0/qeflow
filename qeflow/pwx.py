@@ -11,7 +11,7 @@ def createPwx(inp: dict):
     '''
     userInp = {
         'calc' : inp['task'],
-        'outdir' : os.path.join(inp['work_dir'], 'outdir'),
+        'outdir' : os.path.join(inp['calc_work_dir'], 'outdir'),
         'pseudo_dir' : os.path.abspath(os.path.join(CWD, inp['pseudo_dir'])),
         'nat' : len(inp['positions']),
         'ntyp' : len(inp['atoms']),}
