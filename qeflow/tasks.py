@@ -1,7 +1,7 @@
 
 from qeflow.logger import Logger
 from qeflow.utils import runProcess
-from qeflow.pwx import createPwx
+from qeflow.pwx import createPwx, parsePwx
 import os
 
 
@@ -21,7 +21,9 @@ def runTask(task, logger = Logger()):
         raise Exception('FailedTaskError')
 
 def parseTask(task, logger = Logger()):
-    #os.rename(task['work_dir']+'/outdir/silicon.xml', task['work_dir']+f'/outdir/silicon{j}.xml')
-    pass
+    if task['task'] in ['vc-relax', 'scf', 'nscf', 'bands']:
+        parsePwx(task)
+
+    
 
     

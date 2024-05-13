@@ -44,6 +44,7 @@ def createWorkflow(inp, cfg, logger = Logger()):
             # adding some new flags
             thisTask['task'] = task
             thisTask['domain'] = domain
+            thisTask['task_indices'] = [i,j]
             thisTask['command'] = f'{cfg['mpix']} -n {inp['nprocs']} {cfg[task]}'
             thisTask['calc_work_dir'] = os.path.join(inp['calc_dir'], f'w{i:03d}')
             thisTask['res_work_dir'] = os.path.join(inp['res_dir'], f'w{i:03d}')
