@@ -32,8 +32,8 @@ def createPwx(inp: dict):
 
 
 def parsePwx(inp: dict):
-    old_xml_path = os.path.join(inp['calc_work_dir'], 'outdir', f'{inp['prefix']}.xml')
-    new_xml_path = os.path.join(inp['res_work_dir'], f'{inp['task_indices'][1]:02d}.{inp['task']}.xml')
+    old_xml_path = os.path.join(inp['calc_work_dir'], 'outdir', f'{inp["prefix"]}.xml')
+    new_xml_path = os.path.join(inp['res_work_dir'], f'{inp["task_indices"][1]:02d}.{inp["task"]}.xml')
     os.makedirs(os.path.dirname(new_xml_path), exist_ok=True) # creates the necessary folders
     os.rename(old_xml_path, new_xml_path)
     data = readYaml(inp['dataFile'])
@@ -103,7 +103,7 @@ def cellBlock(inp):
     # right now only ceel-dofree is implemented
     if inp['task'] in ['vc-relax', 'vc-md']:
         text = '&CELL\n'
-        text += f'  cell_dofree = {inp['cell_dofree']}\n'
+        text += f'  cell_dofree = {inp["cell_dofree"]}\n'
         text += '/'
     else:
         text = ''
