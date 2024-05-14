@@ -57,11 +57,11 @@ def qeflow():
 
             elif cluster == 'local':
                 logger.info(f'\n--------------------------------', 1)
-                logger.info(f'Running on the local environment using {input['nprocs']} processors.\n', 1)
+                logger.info(f'Running on the local environment using {input["nprocs"]} processors.\n', 1)
                 for i, workflow in enumerate(workflowList):
-                    logger.info(f'Running workflow {i}: {workflow[0]['domain']}', 1)
+                    logger.info(f'Running workflow {i}: {workflow[0]["domain"]}', 1)
                     for j, task in enumerate(workflow):
-                        logger.info(f' * task {j}: {task['task']}', 1)
+                        logger.info(f' * task {j}: {task["task"]}', 1)
                         createTask(task, logger)
                         runTask(task, logger)
                         parseTask(task, logger)
