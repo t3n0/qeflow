@@ -16,7 +16,7 @@ workflow:
     - nscf:
         kpoints: [8,8,8]
 withrespectto:
-    - ecutwfc: [60, 80, 100]
+    - ecutwfc: [20, 40, 60]
 
 
 ######################### Computation flags #########################

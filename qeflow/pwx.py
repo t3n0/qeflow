@@ -3,7 +3,7 @@ Functions for the pw.x executable
 '''
 
 from qeflow.constants import *
-from qeflow.parsers import parseTotalEnergy, parseFermiEnergy
+from qeflow.parsers import parseEnergies, parseFermiEnergy
 from qeflow.utils import readYaml, saveYaml
 
 
@@ -38,17 +38,18 @@ def parsePwx(inp: dict):
     os.rename(old_xml_path, new_xml_path)
     data = readYaml(inp['dataFile'])
     if inp['task'] == 'scf':
-        totalE = parseTotalEnergy(new_xml_path)
-        if 'totalE' in data.keys():
-            data['totalE'].append(totalE)
-        else:
-            data['totalE'] = [totalE]
+        energies = parseEnergies(new_xml_path)
+        for k,v in energies.items():
+            if k in data.keys():
+                data[k].append(v)
+            else:
+                data[k] = [v]
     elif inp['task'] == 'nscf':
         fermiE = parseFermiEnergy(new_xml_path)
-        if 'fermiE' in data.keys():
-            data['fermiE'].append(fermiE)
+        if 'efermi' in data.keys():
+            data['efermi'].append(fermiE)
         else:
-            data['fermiE'] = [fermiE]
+            data['efermi'] = [fermiE]
     saveYaml(data, inp['dataFile'])
     
 

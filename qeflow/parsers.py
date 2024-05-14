@@ -79,11 +79,11 @@ def parseFermiEnergy(path):
     return float(fermi_energy)*H2E
 
 
-def parseTotalEnergy(path):
+def parseEnergies(path):
     with open(path, 'r') as f:
         data = xmltodict.parse(f.read())
     energies = data['qes:espresso']['output']['total_energy']
-    total = 0
+    energiesEv = {}
     for k,v in energies.items():
-        total += float(v)
-    return float(energies['etot'])*H2E
+        energiesEv[k] = float(v)*H2E
+    return energiesEv

@@ -57,7 +57,7 @@ def createSlurm(inp, cfg, wfList, logger = Logger()):
 
     slurmInp['srunBlock'] = text
     
-    slurmPath = os.path.join(inp['calc_dir'], 'slurm.sub')
+    slurmPath = os.path.join(inp['work_calc_dir'], 'slurm.sub')
     os.makedirs(os.path.dirname(slurmPath), exist_ok=True) # creates the necessary folders
     logger.info(f'Saving slurm batch file to disk:\n   {slurmPath}', 1)
     with open(slurmPath, 'w') as slurmfile:
