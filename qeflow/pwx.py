@@ -92,7 +92,7 @@ def ionsBlock(inp):
     # none of them is currently implemented
     if inp['task'] in ['relax', 'md', 'vc-relax', 'vc-md']:
         text = '&IONS\n'
-        text += '/'
+        text += '/\n'
     else:
         text = ''
     return text
@@ -103,8 +103,8 @@ def cellBlock(inp):
     # right now only ceel-dofree is implemented
     if inp['task'] in ['vc-relax', 'vc-md']:
         text = '&CELL\n'
-        text += f'  cell_dofree = {inp["cell_dofree"]}\n'
-        text += '/'
+        text += f'  cell_dofree = "{inp['cell_dofree']}"\n'
+        text += '/\n'
     else:
         text = ''
     return text
@@ -183,12 +183,13 @@ pwxSkel = '''
   mixing_beta = {mixing_beta}
 /
 
+{ionsBlock}
+{cellBlock}
+
 {atomicSpeciesBlock}
 {atomicPositionsBlock}
 {kPointsBlock}
 {cellParametersBlock}
-{ionsBlock}
-{cellBlock}
 '''
 
 

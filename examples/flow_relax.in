@@ -1,43 +1,35 @@
-
-# Simple workflow to obtain a relaxed scf
-#
-# The workflow performs all given calculations in order
-# No 'withrespectto' flags are given
-# The output is automatically collected
-
-# NOTE1:
-# we set some specific flags in relax and scf explicitly
-# the corresponding default flags at the end are ignored
-
-# NOTE2:
-# the scf is aware of the workflow
-# and will use the updated relaxed coordinates
-# ignoring the positions flag at the end
 ---
 
+
+########################### Workflow flags ##########################
+
+name: relax_Si
 workflow:
-    - relax:
-        kpoints: [8,8,1]
-    - scf:
-        kpoints: [12,12,1]
+    - vc-relax:
+    - nscf:
+        kpoints: [12,12,12]
 
-withrespectto:
+######################### Computation flags #########################
 
-name: scf_conv
-cluster: local 
-nprocs: 4         
+nprocs    :  4
+time: 0:20:0                           # hh:mm:ss, requested time for a HPC job
+                                # default 0:20:0
+partition: standard                     # default is standard
+qos: short
 
 
 ############################## QE flags #############################
 
-prefix         : WSe2
-pseudo_pots    : [W.rel-pbe-us-wfc8-z14.upf, Se.rel-pbe-us-wfc3-z6.upf]
-atoms          : [W, Se]
-masses         : [183.84, 78.96]
-positions      : [[W,  0.0,    0.0,     0.0],
-                  [Se, 0.0, 1.9035,  1.6747],
-                  [Se, 0.0, 1.9035, -1.6747]]
-unit_cell      : [[3.2970,    0.0,   0.0],
-                  [1.6485, 2.8553,   0.0],
-                  [   0.0,    0.0, 32.97]]
-kpoints        : [4, 4, 1]
+pseudo_pots    : [Si.pbe-n-rrkjus_psl.1.0.0.UPF]
+atoms          : [Si]
+masses         : [28.085]
+positions      : [[ Si,    0.0,    0.0,     0.0 ],
+                  [ Si, 1.3575, 1.3575,  1.3575 ]]
+unit_cell      : [[ 2.715, 2.715,   0.0 ],
+                  [   0.0, 2.715, 2.715 ],
+                  [ 2.715,   0.0, 2.715 ]]
+
+kpoints        : [8, 8, 8]
+prefix         :  silicon
+pseudo_dir     : /home/tentacolo/Documents/Physics/Projects/PPs/SSSP_efficiency
+
