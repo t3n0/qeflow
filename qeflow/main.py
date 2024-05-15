@@ -54,6 +54,7 @@ def qeflow():
                 runProcess('sbatch', slurmPath)
                 logger.info(f'\n--------------------------------', 1)
                 logger.info(f'Slurm script submitted succesfully.', 1)
+                logger.saveLog(input['logger_path'], 'w')
 
             elif cluster == 'local':
                 logger.info(f'\n--------------------------------', 1)
