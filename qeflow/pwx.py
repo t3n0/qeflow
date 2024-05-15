@@ -103,7 +103,7 @@ def cellBlock(inp):
     # right now only ceel-dofree is implemented
     if inp['task'] in ['vc-relax', 'vc-md']:
         text = '&CELL\n'
-        text += f'  cell_dofree = "{inp['cell_dofree']}"\n'
+        text += f'  cell_dofree = "{inp["cell_dofree"]}"\n'
         text += '/\n'
     else:
         text = ''
