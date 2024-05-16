@@ -1,0 +1,39 @@
+---
+# Simple workflow for a variable cell relaxation
+#
+# The workflow performs the given tasks in order
+# No 'withrespectto' flags are given
+# The output is parsed automatically and collected in `prefix`.txt
+
+# NOTE:
+# we increase the kpoints for the nscf calcualtion explicitly
+# the corresponding default flags at the end are ignored
+
+########################### Workflow flags ##########################
+
+name: vc-relax+nscf.Si
+workflow:
+    - vc-relax:
+    - nscf:
+        kpoints: [12,12,12]
+
+######################### Computation flags #########################
+
+nprocs: 4
+
+############################## QE flags #############################
+
+pseudo_pots    : [Si.pbe-n-rrkjus_psl.1.0.0.UPF]
+atoms          : [Si]
+masses         : [28.085]
+positions      : [[ Si,    0.0,    0.0,     0.0 ],
+                  [ Si, 1.3575, 1.3575,  1.3575 ]]
+unit_cell      : [[ 2.715, 2.715,   0.0 ],
+                  [   0.0, 2.715, 2.715 ],
+                  [ 2.715,   0.0, 2.715 ]]
+
+kpoints        : [8, 8, 8]
+ecutwfc        : 80
+prefix         : silicon
+pseudo_dir     : /home/tentacolo/Documents/Physics/Projects/PPs/SSSP_efficiency
+

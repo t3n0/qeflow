@@ -1,0 +1,45 @@
+---
+# Simple workflow to obtain the DOS
+#
+# The workflow performs the given tasks in order
+# No 'withrespectto' flags are given
+# The output is parsed automatically and collected in `prefix`.txt
+
+# NOTE:
+# we set some specific flags in scf and nscf explicitly
+# the corresponding default flags at the end are ignored
+
+########################### Workflow flags ##########################
+
+name: scf+nscf+dos.Si
+workflow:
+    - scf:
+        kpoints: [8,8,8]
+    - nscf:
+        kpoints: [12,12,12]
+        occupations: tetrahedra
+    - dos
+
+######################### Computation flags #########################
+
+nprocs: 4
+
+############################## QE flags #############################
+
+pseudo_pots    : [Si.pbe-n-rrkjus_psl.1.0.0.UPF]
+atoms          : [Si]
+masses         : [28.085]
+positions      : [[ Si,    0.0,    0.0,     0.0 ],
+                  [ Si, 1.3575, 1.3575,  1.3575 ]]
+unit_cell      : [[ 2.715, 2.715,   0.0 ],
+                  [   0.0, 2.715, 2.715 ],
+                  [ 2.715,   0.0, 2.715 ]]
+
+kpoints        : [4, 4, 4]
+kpoints_mode   : automatic
+kpoints_offset : [0, 0, 0]
+prefix         :  silicon
+pseudo_dir     :  /home/SSSP_efficiency
+ecutwfc        :  50
+conv_thr       :  1e-8
+mixing_beta    :  0.7

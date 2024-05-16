@@ -1,0 +1,81 @@
+#                       ------------------------------
+#                      |   QE-flow input parameters   |
+#                       ------------------------------
+#
+# This is a YAML file: see "What is YAML?" at the link
+# https://www.redhat.com/en/topics/automation/what-is-yaml
+#
+# YAML is cool because it is easy to read and write by humans and computers.
+# It accepts comments, which is very helpful.
+# Also, YMAL is a superset of JSON.
+# Any valid JSON entry is also valid in YAML.
+# In the following all the currently implemented flags and their description.
+
+---
+
+########################### Workflow flags ##########################
+
+name:                           # directory where to save this run
+                                # default `myflow`
+
+workflow:                       # workflow is a list of tasks
+    - vc-relax
+    - scf:
+        kpoints: [4,4,1]        # each task can also take arguments
+                                # these arguments overwrite the default ones
+    - nscf:
+        kpoints: [8,8,1]
+        kpoints_mode: crystal
+    
+
+withrespectto:                  # wrt flag specifies a list of parameters
+                                # can be left empty, i.e. no iterations
+                                # default is empty
+    - ecutwfc: [40, 60, 80]     # each parameter is itself a list
+                                # the workflow will iterate over these parameters
+
+######################### Optional parameters #######################
+
+nprocs:                         # number of mpi processes to launch
+                                # default 1
+time:                           # hh:mm:ss, requested time for a HPC job
+                                # default 0:20:0
+partition:                      # default is standard
+qos:                            # default is short
+
+############################## QE flags #############################
+
+##### MANDATORY #####
+pseudo_pots     : [pp1, pp2, pp3]               # list of pseudo potentials
+
+atoms           : [atom1, atom2, atom3]         # list of atom symbols
+
+masses          : [mass1, mass2, mass3]         # list of atomic masses
+
+positions       : [[atom1,  posx, posy, posz],  # list of atomic positions
+                   [atom2,  posx, posy, posz],
+                   [atom3,  posx, posy, posz],
+                   [atom2,  posx, posy, posz]]
+
+unit_cell       : [[a1x, a1y, a1z],             # list of lattice vectors, angstrom
+                   [a2x, a2y, a2z],             # this is the ibrav = 0 case
+                   [a3x, a3y, a3z]]             # in the future i'll implement the other cases as well
+
+kpoints         : [n1, n2, n3]                  # kpoint M-P grid
+
+
+##### OPTIONAL #####
+prefix:                 # mycalc
+pseudo_dir:             # /HOME/ppdir
+verbosity:              # low
+nbnd:                   # none
+ecutwfc:                # 50
+lspinorb:               # False
+noncolin:               # False
+nosym:                  # False
+assume_isolated:        # none
+conv_thr:               # 1e-8
+mixing_beta:            # 0.7
+kpoints_mode:           # automatic
+kpoints_offset:         # [0, 0, 0]
+cell_dofree:            # all
