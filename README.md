@@ -117,7 +117,7 @@ Finally, the third block of flags contains all the usual [quantum espresso keys]
 
 Now it's time to run the workflow: the executable to call is simply `qeflow`. You can type `qeflow -h` for a short help menu showing other options such as `dry-run` and `verbosity`. Now type:
 
-```
+```bash
 qeflow ecutSi.in
 ```
 
@@ -136,7 +136,7 @@ print(df[['ecutwfc','etot']])
 
 The output is the following:
 
-```
+```x
    ecutwfc        etot
 0       10 -310.790657
 1       20 -310.720741
@@ -204,7 +204,7 @@ That's all for now.
 
 ## Support
 
-For any problems, questions or suggestions, please contact me at tenobaldi@gmail.com.
+For any problems, questions or suggestions, please contact me at `tenobaldi@gmail.com`.
 
 ## Roadmap
 
