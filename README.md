@@ -238,4 +238,4 @@ You should have received a copy of the GNU General Public License along with thi
 [slurm]: https://slurm.schedmd.com/overview.html
 [gpl3]: https://www.gnu.org/licenses/gpl-3.0
 [latest]: https://github.com/t3n0/qeflow/releases/latest
-[download]: https://github.com/t3n0/qeflow/releases/download/v0.1/qeflow-v0.1.zip
+[download]: https://github.com/t3n0/qeflow/releases/download/v0.1/qeflow-0.1.tar.gz
