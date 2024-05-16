@@ -37,7 +37,7 @@ The first thing to do is to create a configuration file. QE-flow will try to rea
 1. from `./qeflow.cfg` (in the current directory)
 2. or from `$HOME/.qeflow.cfg` (notice the dot, hidden file)
 
-A configuration file skeleton is found in [qeflowSkel.cfg](examples/qeflowSkel.cfg). In the following we show 2 examples.
+A configuration file skeleton is found in [qeflowSkel.cfg](examples/qeflow.cfg). In the following we show 2 examples.
 
 1. **Local** configuration: useful we running simulation on a personal computer.
 
@@ -66,7 +66,7 @@ In the future, I might implement also the [PBS] batch system.
 
 ### 2. Input file
 
-The input file skeleton with the currently supported flags and relative description is found in [qeflowSkel.in](examples/qeflowSkel.in).
+The input file skeleton with the currently supported flags and relative description is found in [qeflowSkel.in](examples/qeflow.in).
 In the following I'll show only 3 minimal examples:
 
 1. a simple `scf` calculation with different values of `ecutwfc`;
@@ -113,7 +113,7 @@ The first three flags are the workflow instructions:
 
 The second block of instruction applies only when running on a HPC. In this case we have the usual [slurm] specifications for number of processors, allocation time, partition and quality of service.
 
-Finally, the third block of flags contains all the usual [quantum espresso keys](pwx-input) necessary for this calculation. The order in which they appear does not matter, just dump them in there (also remember to look at the definitions in [qeflowSkel.in](examples/qeflowSkel.in)).
+Finally, the third block of flags contains all the usual [quantum espresso keys](pwx-input) necessary for this calculation. The order in which they appear does not matter, just dump them in there (also remember to look at the definitions in [qeflowSkel.in](examples/qeflow.in)).
 
 Now it's time to run the workflow: the executable to call is simply `qeflow`. You can type `qeflow -h` for a short help menu showing other options such as `dry-run` and `verbosity`. Now type:
 
