@@ -3,7 +3,7 @@
 All notable changes of [qeflow](qeflow) releases.  
 For the development unreleased (and unstable) version see [here](unreleased).
 
-## [QE-flow v0.1](https://github.com/t3n0/qeflow/releases/tag/v0.1) (2024-05-15)
+## [QE-flow v0.1](https://github.com/t3n0/qeflow/releases/tag/v0.1) (2024-05-16)
 
 ### Added
 
