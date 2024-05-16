@@ -1,4 +1,4 @@
-# Quantum Espresso workflow tool: `qeflow`
+# `qeflow` Quantum Espresso workflow tool
 
 [![GitHub Release Date](https://img.shields.io/github/release-date/t3n0/qeflow)](latest)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/t3n0/qeflow)](latest)
