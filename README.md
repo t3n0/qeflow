@@ -204,7 +204,7 @@ That's all for now.
 
 ## Support
 
-For any problems, questions or suggestions, please contact me at `tenobaldi@gmail.com`.
+For any problems, questions or suggestions, please contact me at <tenobaldi@gmail.com>.
 
 ## Roadmap
 
