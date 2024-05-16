@@ -3,7 +3,7 @@
 [![GitHub Release Date](https://img.shields.io/github/release-date/t3n0/qeflow)](https://github.com/t3n0/qeflow/releases/latest)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/t3n0/qeflow)](https://github.com/t3n0/qeflow/releases/latest)
 [![GitHub all releases](https://img.shields.io/github/downloads/t3n0/qeflow/total)](https://github.com/t3n0/qeflow/releases/latest)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](gpl3)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 QE-flow is a python tool which helps to automate quantum espresso workflows "without scassamento di maroni", i.e. *easily*.
 Out in the internet there are many other options that perform this very same tasks and in a much more efficient way.
@@ -113,7 +113,7 @@ The first three flags are the workflow instructions:
 
 The second block of instruction applies only when running on a HPC. In this case we have the usual [slurm] specifications for number of processors, allocation time, partition and quality of service.
 
-Finally, the third block of flags contains all the usual [quantum espresso keys](pwx-input) necessary for this calculation. The order in which they appear does not matter, just dump them in there (also remember to look at the definitions in [qeflow.in](examples/qeflow.in)).
+Finally, the third block of flags contains all the usual [quantum espresso keys](https://www.quantum-espresso.org/Doc/INPUT_PW.html) necessary for this calculation. The order in which they appear does not matter, just dump them in there (also remember to look at the definitions in [qeflow.in](examples/qeflow.in)).
 
 Now it's time to run the workflow: the executable to call is simply `qeflow`. You can type `qeflow -h` for a short help menu showing other options such as `dry-run` and `verbosity`. Now type:
 
@@ -231,11 +231,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-[pwx-input]: https://www.quantum-espresso.org/Doc/INPUT_PW.html#__top__
 [pandas]: https://pandas.pydata.org/
 [yaml]: https://yaml.org/
 [pbs]: https://en.wikipedia.org/wiki/Portable_Batch_System
 [slurm]: https://slurm.schedmd.com/overview.html
-[gpl3]: https://www.gnu.org/licenses/gpl-3.0
-[latest]: https://github.com/t3n0/qeflow/releases/latest
-[download]: https://github.com/t3n0/qeflow/releases/download/v0.1/qeflow-0.1.tar.gz
